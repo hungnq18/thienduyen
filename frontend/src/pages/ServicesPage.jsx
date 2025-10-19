@@ -1,28 +1,23 @@
-import React from 'react';
-
+import CoordinationSeviceSection from '../components/CoordinationSeviceSection';
+import DecorationServiceSection from '../components/DecorationServiceSection';
+import PlanningServiceSection from '../components/planningServiceSection';
+import ServiceSection from '../components/ServiceSection';
 const ServicesPage = () => {
   return (
-    <div className="services-page">
-      <div className="container">
-        <h1>Dịch vụ của chúng tôi</h1>
-        <div className="services-grid">
-          <div className="service-card">
-            <h3>Phát triển Web</h3>
-            <p>Thiết kế và phát triển website chuyên nghiệp</p>
-          </div>
-          <div className="service-card">
-            <h3>Ứng dụng Mobile</h3>
-            <p>Phát triển ứng dụng di động cho iOS và Android</p>
-          </div>
-          <div className="service-card">
-            <h3>Tư vấn IT</h3>
-            <p>Đưa ra giải pháp công nghệ phù hợp</p>
-          </div>
-          <div className="service-card">
-            <h3>Bảo trì hệ thống</h3>
-            <p>Hỗ trợ và bảo trì hệ thống công nghệ</p>
-          </div>
-        </div>
+    <div className="root">
+      <ServiceSection />
+      <DecorationServiceSection />
+      <PlanningServiceSection />
+      <CoordinationSeviceSection />
+      <div className='text-link mx-auto my-10 text-center'>
+        <a href="/https://www.facebook.com/profile.php?id=61581429876073&mibextid=wwXIfr&mibextid=wwXIfr" style={{
+          color: "#000000",
+          fontSize: "52px",
+          textDecoration: "none",
+          fontFamily: 'Beau Rivage, sans-serif',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>Follow Us On Facebook</a>
       </div>
     </div>
   );

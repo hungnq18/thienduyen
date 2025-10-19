@@ -1,4 +1,3 @@
-import React from 'react';
 import face from '../assets/face.svg';
 import logo from '../assets/logo.svg';
 const Footer = () => {
@@ -56,8 +55,8 @@ const Footer = () => {
       {/* Social Media Icons */}
       <div className="absolute left-[866px] top-[142px] flex gap-4">
         {/* Facebook */}
-        <div className="w-[42px] h-[42px] bg-transparent rounded-full flex items-center justify-center">
-          <img src={face} alt="face" className="w-[42px] h-[42px]" />
+        <div className="w-[42px] h-[42px] bg-transparent rounded-full flex items-center justify-center cusor-pointer" onClick={() => window.open("https://www.facebook.com/profile.php?id=61581429876073&mibextid=wwXIfr&mibextid=wwXIfr")}>
+          <img src={face} alt="face" className="w-[42px] h-[42px]" href="https://www.facebook.com/profile.php?id=61581429876073&mibextid=wwXIfr&mibextid=wwXIfr" />
         </div>
 
         {/* TikTok */}

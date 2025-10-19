@@ -1,8 +1,7 @@
-import React from 'react';
 
 const ServiceCard = ({ service }) => {
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col" onClick={() => { window.location.href = `/services/${service.id}` }}>
             {/* Service Image - Separate Card */}
             <div className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="h-[28rem] overflow-hidden">
