@@ -1,6 +1,6 @@
 import CoordinationSeviceSection from '../components/CoordinationSeviceSection';
 import DecorationServiceSection from '../components/DecorationServiceSection';
-import PlanningServiceSection from '../components/planningServiceSection';
+import PlanningServiceSection from '../components/PlanningServiceSection';
 import ServiceSection from '../components/ServiceSection';
 const ServicesPage = () => {
   return (
