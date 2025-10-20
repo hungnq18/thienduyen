@@ -1,5 +1,5 @@
 
-import { Eye, EyeOff, Lock, Mail, X } from "lucide-react"
+import { Eye, EyeOff, Lock, Mail } from "lucide-react"
 import { useState } from "react"
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -52,11 +52,6 @@ export default function LoginPage() {
       {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50">
         <div className="w-full max-w-md">
-          {/* Close button for mobile */}
-          <button className="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-            <X size={24} />
-          </button>
-
           {/* Header */}
           <div className="mb-8">
             <p className="text-sm text-gray-600 mb-2">Xin chào bạn</p>
