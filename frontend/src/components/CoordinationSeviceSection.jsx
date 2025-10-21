@@ -31,15 +31,15 @@ function DecorationSeviceSection() {
 
 
       {/* Content Section */}
-      <div className="flex flex-col md:flex-row w-5/6 mx-auto mt-4 md:mt-10 gap-4">
+      <div className="flex flex-col md:flex-row w-5/6 mx-auto mt-4 md:mt-10">
         <img
           src="https://res.cloudinary.com/dijayprrw/image/upload/v1760802313/Rectangle_4484_mrfxbz.png"
           alt="Decoration Service"
-          className="w-full md:w-1/2 h-64 sm:h-80 md:h-auto object-cover rounded-md"
+          className="w-full md:w-1/2 h-64 sm:h-80 md:h-auto object-cover md:rounded-l-md"
         />
 
-        <div className="w-full md:w-1/2 flex justify-center items-center">
-          <div className="bg-[#EBEBEB] text-center px-6 sm:px-10 py-8 sm:py-12 max-w-lg md:max-w-xl rounded-md">
+        <div className="w-full md:w-1/2 flex justify-center items-stretch">
+          <div className="bg-[#EBEBEB] px-6 sm:px-10 py-8 sm:py-12 w-full md:rounded-r-md flex flex-col justify-center items-center">
             {/* Subtitle */}
             <p className="font-[Arima_Madurai] text-sm sm:text-base text-black opacity-90 mb-3">
               Gói dịch vụ
@@ -62,7 +62,7 @@ function DecorationSeviceSection() {
 
             {/* Contact Button */}
             <button
-              className="transition-colors duration-300 uppercase border-2 border-[#610912] text-white bg-[#610912] font-[Bebas_Neue] text-base sm:text-lg px-6 py-2 sm:px-8 sm:py-3 hover:bg-white hover:text-[#610912]"
+              className="transition-colors duration-300 uppercase border-2 border-[#610912] text-white bg-[#610912] font-[Bebas_Neue] text-base sm:text-lg px-6 py-2 sm:px-8 sm:py-3 hover:bg-white hover:text-[#610912] inline-block"
             >
               CONTACT US
             </button>

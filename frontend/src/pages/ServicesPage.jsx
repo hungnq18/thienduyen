@@ -10,14 +10,21 @@ const ServicesPage = () => {
       <PlanningServiceSection />
       <CoordinationSeviceSection />
       <div className='text-link mx-auto my-10 text-center'>
-        <a href="/https://www.facebook.com/profile.php?id=61581429876073&mibextid=wwXIfr&mibextid=wwXIfr" style={{
-          color: "#000000",
-          fontSize: "52px",
-          textDecoration: "none",
-          fontFamily: 'Beau Rivage, sans-serif',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>Follow Us On Facebook</a>
+        <a 
+          href="https://www.facebook.com/profile.php?id=61581429876073&mibextid=wwXIfr" 
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: "#000000",
+            fontSize: "52px",
+            textDecoration: "none",
+            fontFamily: 'Beau Rivage, sans-serif',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          Follow Us On Facebook
+        </a>
       </div>
     </div>
   );

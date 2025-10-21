@@ -42,65 +42,83 @@ function PlanningServiceSection() {
         </div>
       </div>
 
+      {/* ================= Text Section ================= */}
+      <div className="w-full bg-[#FDF6EE] pt-10 pb-5 sm:pt-12 sm:pb-6 lg:pt-16 lg:pb-8">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
+          <p 
+            className="text-justify text-[16px] sm:text-[17px] lg:text-[18px] leading-relaxed text-gray-800 font-medium"
+            style={{ fontFamily: 'Arima Madurai, serif', lineHeight: '1.8' }}
+          >
+            Chúng tôi tin rằng mỗi đám cưới không chỉ là ngày trong đại, mà còn là một hành trình thiêng liêng. 
+            Với sự đồng hành tận tâm, Thiện Duyên giúp cặp đôi từ khâu chuẩn bị, xây dựng ý tưởng cho đến tổ chức trọn vẹn nghi lễ, để ngày cưới trở thành đầu ấn đẹp và ý nghĩa nhất trong đời.
+          </p>
+        </div>
+      </div>
+
       {/* ================= Get In Touch Section ================= */}
-      <div className="relative w-full bg-[#FDF6EE] py-10 sm:py-16">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4 sm:px-6">
-          {/* Left Image */}
-          <div className="relative w-full md:w-1/2 flex justify-center md:justify-start md:absolute md:left-0 md:top-0">
-            <img
-              src="https://res.cloudinary.com/dijayprrw/image/upload/v1760742053/Rectangle_4483_rdoryq.png"
-              alt="Wedding Couple"
-              className="w-[85%] sm:w-[70%] md:w-full h-auto object-cover md:h-[auto]"
-            />
-          </div>
+      <div className="relative w-full bg-[#FDF6EE] pt-5 pb-10 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="relative flex flex-col lg:flex-row items-center lg:items-center justify-center">
+            {/* Left Image - Overlapping */}
+            <div className="relative lg:absolute lg:left-0 lg:top-1/2 lg:-translate-y-1/2 z-10 mb-8 lg:mb-0">
+              <img
+                src="https://res.cloudinary.com/dijayprrw/image/upload/v1760742053/Rectangle_4483_rdoryq.png"
+                alt="Wedding Couple"
+                className="w-full max-w-[480px] lg:max-w-[600px] xl:max-w-[650px] h-auto object-cover"
+              />
+            </div>
 
-          {/* Right Box */}
-          <div className="relative w-full md:w-1/2 bg-[#FDF6EE] border-[10px] sm:border-[20px] border-[#EBEBEB] p-6 sm:p-8 text-center md:text-center md:ml-[45%]">
-            <p
-              className="text-[13px] sm:text-[14px] opacity-90 text-black"
-              style={{ fontFamily: 'Arima Madurai,sans-serif' }}
-            >
-              Get in touch
-            </p>
+            {/* Right Box - Content with left padding to avoid overlap */}
+            <div className="w-full lg:w-auto lg:ml-auto lg:max-w-[700px] xl:max-w-[800px]">
+              <div className="w-full border-[15px] lg:border-[20px] border-[#EBEBEB] lg:pl-48 xl:pl-56 pr-8 lg:pr-12 py-8 lg:py-12 pl-8 text-center">
+                <p
+                  className="text-[14px] lg:text-[15px] text-gray-700 mb-2"
+                  style={{ fontFamily: 'Arima Madurai, sans-serif' }}
+                >
+                  Get in touch
+                </p>
 
-            <h2
-              className="uppercase font-[Bebas_Neue] text-[28px] sm:text-[36px] md:text-[39px] leading-tight text-black tracking-[1px] my-3"
-            >
-              CELEBRATE YOUR MOST <br className="hidden sm:block" /> BEAUTIFUL DAY
-            </h2>
+                <h2
+                  className="uppercase text-[32px] lg:text-[40px] xl:text-[45px] leading-tight text-black font-normal mb-6"
+                  style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.02em' }}
+                >
+                  CELEBRATE YOUR MOST<br />
+                  BEAUTIFUL DAY
+                </h2>
 
-            <p
-              className="text-[15px] sm:text-[17px] md:text-[18px] leading-[28px] text-black mb-6 md:text-justify md:pl-6"
-              style={{ fontFamily: "'Arima Madurai', serif" }}
-            >
-              Tại Thiện Duyên, chúng tôi tin rằng ngày cưới không chỉ là một sự kiện,
-              mà là khoảnh khắc thiêng liêng mở ra hành trình mới. Bằng sự tận tâm và tinh tế,
-              Thiện Duyên kiến tạo không gian và nghi lễ để mỗi cặp đôi có thể tận hưởng trọn vẹn
-              ngày đẹp nhất trong đời mình.
-            </p>
+                <p
+                  className="text-[16px] lg:text-[17px] xl:text-[18px] leading-relaxed text-gray-800 mb-8"
+                  style={{ fontFamily: 'Arima Madurai, serif', lineHeight: '1.8' }}
+                >
+                  Tại Thiện Duyên, chúng tôi tin rằng ngày cưới không chỉ là một sự kiện, 
+                  mà là khoảnh khắc thiêng liêng mở ra hành trình mới. Bằng sự tận tâm và tinh tế, 
+                  Thiện Duyên kiến tạo không gian và nghi lễ để mỗi cặp đôi có thể tận hưởng trọn vẹn 
+                  ngày đẹp nhất trong đời mình – an yên, ý nghĩa và vĩnh cửu.
+                </p>
 
-            <button
-              onClick={() => navigate('/contact')}
-              className="uppercase border-2 text-[20px] sm:text-[23px] md:text-[25px] w-[160px] sm:w-[180px] md:w-[200px] h-[42px] sm:h-[45px] mx-auto md:mx-0 flex justify-center items-center md:items-center transition-all duration-300"
-              style={{
-                backgroundColor: '#610912',
-                color: '#FFFFFF',
-                borderColor: '#610912',
-                fontFamily: 'Bebas Neue, sans-serif',
-                fontWeight: 200,
-                letterSpacing: '0.05em',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.color = '#610912';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#610912';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-            >
-              CONTACT US
-            </button>
+                <button
+                  onClick={() => navigate('/contact')}
+                  className="uppercase text-[22px] lg:text-[24px] px-8 py-3 transition-all duration-300 hover:shadow-lg"
+                  style={{
+                    backgroundColor: '#610912',
+                    color: '#FFFFFF',
+                    border: '2px solid #610912',
+                    fontFamily: 'Bebas Neue, sans-serif',
+                    letterSpacing: '0.05em',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#610912';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#610912';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }}
+                >
+                  CONTACT US
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
