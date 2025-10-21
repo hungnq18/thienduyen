@@ -27,8 +27,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    authService.logout();
+    // Clear localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // Clear user state
     setUser(null);
+    
+    // Redirect to login - use window.location for clean reload
+    // This works better in production than react-router navigate
+    setTimeout(() => {
+      window.location.replace('/login');
+    }, 100);
   };
 
   const value = {

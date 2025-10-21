@@ -23,11 +23,12 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="*" element={<div>404 Not Found</div>} />
           <Route path="/quotation" element={<QuotationPage />} />
           <Route path="/services/1" element={<PlanningQuotation />} />
           <Route path="/services/2" element={<DecorQuotation />} />
           <Route path="/services/3" element={<CoordinatorQuotation />} />
+          {/* 404 route phải ở cuối cùng */}
+          <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
       </MainLayout>
     </Router>

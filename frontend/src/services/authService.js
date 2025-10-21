@@ -37,11 +37,13 @@ class AuthService {
     }
   }
 
-  // Logout user
+  // Logout user (deprecated - use AuthContext.logout() instead)
+  // Keeping this for backward compatibility
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/login';
+    // Use replace instead of href to prevent browser history issues
+    window.location.replace('/login');
   }
 
   // Get current user
