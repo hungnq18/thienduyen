@@ -1,10 +1,13 @@
+import { LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.svg'; // logo của bạn
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
 
   const isActive = (path) => {
     if (path === '/' && location.pathname === '/') return true;
@@ -37,12 +40,30 @@ const Header = () => {
 
         {/* Auth links */}
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/register" className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold">
-            Đăng Ký
-          </Link>
-          <Link to="/login" className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold">
-            Đăng Nhập
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <div className="flex items-center gap-2 text-[#F8FBF2]">
+                <User size={20} />
+                <span className="font-semibold">{user?.fullName || user?.email}</span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold"
+              >
+                <LogOut size={20} />
+                Đăng Xuất
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/register" className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold">
+                Đăng Ký
+              </Link>
+              <Link to="/login" className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold">
+                Đăng Nhập
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Hamburger Menu (Mobile) */}
@@ -112,8 +133,33 @@ const Header = () => {
           ))}
 
           <div className="flex flex-col items-center gap-4 mt-4">
-            <Link to="/register" className="text-[#F8FBF2] hover:text-[#E8C585]">Đăng Ký</Link>
-            <Link to="/login" className="text-[#F8FBF2] hover:text-[#E8C585]">Đăng Nhập</Link>
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-2 text-[#F8FBF2]">
+                  <User size={20} />
+                  <span>{user?.fullName || user?.email}</span>
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    setMenuOpen(false);
+                  }}
+                  className="flex items-center gap-2 text-[#F8FBF2] hover:text-[#E8C585]"
+                >
+                  <LogOut size={20} />
+                  Đăng Xuất
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/register" onClick={() => setMenuOpen(false)} className="text-[#F8FBF2] hover:text-[#E8C585]">
+                  Đăng Ký
+                </Link>
+                <Link to="/login" onClick={() => setMenuOpen(false)} className="text-[#F8FBF2] hover:text-[#E8C585]">
+                  Đăng Nhập
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
