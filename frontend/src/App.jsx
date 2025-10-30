@@ -5,6 +5,10 @@ import DecorQuotation from './components/DecorQuotation';
 import PlanningQuotation from './components/PlanningQuotation';
 import MainLayout from './layouts/mainLayout';
 import AboutPage from './pages/AboutPage';
+import BlogPage from './pages/BlogPage';
+import BlogPost1 from './pages/BlogPost1';
+import BlogPost2 from './pages/BlogPost2';
+import BlogPost3 from './pages/BlogPost3';
 import ContactPage from './pages/ContactPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/Login';
@@ -24,6 +28,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/quotation" element={<QuotationPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/1" element={<BlogPost1 />} />
+          <Route path="/blog/2" element={<BlogPost2 />} />
+          <Route path="/blog/3" element={<BlogPost3 />} />
           <Route path="/services/1" element={<PlanningQuotation />} />
           <Route path="/services/2" element={<DecorQuotation />} />
           <Route path="/services/3" element={<CoordinatorQuotation />} />
