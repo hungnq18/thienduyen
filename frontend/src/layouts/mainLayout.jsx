@@ -1,4 +1,5 @@
 import React from 'react';
+import ChatBot from '../components/ChatBot';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
@@ -10,6 +11,7 @@ const MainLayout = ({ children }) => {
         {children}
       </main>
       <Footer />
+      <ChatBot />
     </div>
   );
 };
