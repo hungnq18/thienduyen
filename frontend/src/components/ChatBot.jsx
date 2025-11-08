@@ -6,7 +6,8 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: 'Xin chào! Tôi là trợ lý AI của Thiện Duyên. Tôi có thể giúp gì cho bạn về dịch vụ Hằng Thuận?',
+      text: 'Chào hai bạn 💛'
+      + 'Mình là Thiện Duyên, người đồng hành cùng các cặp đôi trên hành trình tổ chức Lễ Hằng Thuận – nghi lễ cưới Phật giáo đầy ý nghĩa.  Bạn muốn mình giúp gì hôm nay ạ?',
       sender: 'bot',
       timestamp: new Date(),
     },
