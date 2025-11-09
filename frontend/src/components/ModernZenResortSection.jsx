@@ -45,7 +45,7 @@ const ModernZenResortSection = () => {
     <section className=" py-12 md:py-16 px-4 md:px-8 bg-white">
       <div className="max-w-7xl mx-auto bg-[#FDF6EE]">
         {/* Main Image Section */}
-        <div className="mb-8 md:mb-12">
+        <div className="mb-8 md:mb-12">   
           <div className="relative w-full h-[400px] md:h-[600px] rounded-lg overflow-hidden shadow-lg">
             <img
               src="https://res.cloudinary.com/dijayprrw/image/upload/v1762681427/Rectangle_4553_3_fiyvs7.png"
