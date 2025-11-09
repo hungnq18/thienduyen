@@ -1,49 +1,65 @@
 import { useNavigate } from 'react-router-dom';
 
-const ModernZenResortSection = () => {
+const ElegantSection = () => {
   const navigate = useNavigate();
   
   const includedItems = [
     {
-      title: 'Cổng tre mộc điểm hoa trắng, lá xanh; bảng gỗ khắc "Lễ Hằng Thuận".',
+      title: 'Cổng chào: cổng hoa lớn phối pastel + đèn vàng ấm.',
       description: '',
     },
     {
-      title: 'Bàn lễ tân phù khăn bố be, lọ gốm cắm sen trắng, bảng welcome và backdrop vách tre, chữ thư pháp thanh nhã.',
+      title: 'Biển Welcome: bảng mica trong khắc chữ vàng.',
       description: '',
     },
     {
-      title: 'Bàn gỗ phủ khăn trắng, điểm hoa sen; lối đi trải chiếu cói, hai bên đèn gỗ và chậu cây xanh.',
+      title: 'Bàn lễ tân: khăn trắng, hoa pastel, nến thơm, album cưới.',
       description: '',
     },
     {
-      title: 'Không gian giản dị mà trang nghiêm, giữ trọn tỉnh thần an nhiên trong từng chi tiết.',
+      title: 'Backdrop chụp hình: khung tròn hoa pastel + đèn fairy light.',
       description: '',
     },
     {
-      title: 'Bàn tiệc cắm hoa trắng, lá xanh; sân khấu khung gỗ, ánh vàng ấm; bánh cưới trắng tinh giản, điểm chút lá xanh thanh khiết.',
+      title: 'Sân khấu / Bàn nghi lễ: backdrop hoa pastel, logo/ chữ Hằng Thuận mạ vàng.',
       description: '',
     },
     {
-      title: 'Thiệp mời, menu, biển chỉ dẫn theo tông be – xanh lá, họa tiết tre gỗ tự nhiên, tinh tế và hài hòa.',
+      title: 'Lối đi chính: thảm trắng, hoa pastel hai bên, đèn fairy lights dọc lối đi.',
+      description: '',
+    },
+    {
+      title: 'Ghế khách: ghế chiavari vàng/trắng, thắt nơ pastel (hồng phấn, xanh mint).',
+      description: '',
+    },
+    {
+      title: 'Hoa bàn tiệc: hoa pastel, bình pha lê.',
+      description: '',
+    },
+    {
+      title: 'Sân khấu tiệc: màn LED, ánh sáng vàng + trắng.',
+      description: '',
+    },
+    {
+      title: 'Bánh cưới: nhiều tầng, trang trí hoa tươi pastel, topper vàng.',
       description: '',
     },
   ];
 
   const leftSideImages = [
     {
-      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762699011/Rectangle_4560_1_hrblxj.png',
+      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762704215/Rectangle_4560_2_daoe2f.png',
       alt: 'Chi tiết trang trí',
     },
   ];
 
   const displayItemImages = [
     {
-      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762702263/Rectangle_4563_woueae.png',
+      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762704657/Rectangle_4563_1_usebik.png',
       alt: 'Tay cầm đĩa với cupcake và trái cây',
     },
     {
-      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762702300/Rectangle_4564_abxqnb.png',
+      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762704733/Rectangle_4564_1_dvcltz.png',
       alt: 'Sách Lễ Hằng Thuận',
     },
   ];
@@ -56,8 +72,8 @@ const ModernZenResortSection = () => {
           <div className="relative w-full h-[400px] md:h-[600px] rounded-lg overflow-visible">
             <div className="relative w-full h-full rounded-lg overflow-hidden">
               <img
-                src="https://res.cloudinary.com/dijayprrw/image/upload/v1762698387/Vector_1_ahipyo.png"
-                alt="Concept Modern Zen"
+                src="https://res.cloudinary.com/dijayprrw/image/upload/v1762704121/Vector_4_v3qc3k.png"
+                alt="Concept elegant"
                 className="w-full h-full object-cover"
               />
               {/* Title Overlay */}
@@ -75,8 +91,8 @@ const ModernZenResortSection = () => {
                     margin: 0,
                   }}
                 >
-                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>MODERN ZEN</span>
-                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>THIỀN HIỆN ĐẠI</span>
+                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>ELEGANT CONTEMPORARY - </span>
+                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>SANG TRỌNG HIỆN ĐẠI</span>
                 </h2>
               </div>
             </div>
@@ -152,7 +168,7 @@ const ModernZenResortSection = () => {
 
         {/* Display Items Section */}
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 px-6 md:px-8 pb-8 md:pb-12 justify-center items-center">
-          <div className="w-auto max-w-fit bg-[#8B4513] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
+          <div className="w-auto max-w-fit bg-[#A0522D] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
             <div className="text-center">
               <h4 
                 className="text-base md:text-lg lg:text-xl text-white uppercase whitespace-nowrap"
@@ -161,11 +177,11 @@ const ModernZenResortSection = () => {
                   fontWeight: 900
                 }}
               >
-                HOÀ QUYỆN THIỀN VÀ LỄ
+                THANH LỊCH TRONG TỪNG CHI TIẾT
               </h4>
             </div>
           </div>
-          <div className="w-auto max-w-fit bg-[#8B4513] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
+          <div className="w-auto max-w-fit bg-[#A0522D] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
             <div className="text-center">
               <h4 
                 className="text-base md:text-lg lg:text-xl text-white uppercase whitespace-nowrap"
@@ -174,7 +190,7 @@ const ModernZenResortSection = () => {
                   fontWeight: 900
                 }}
               >
-                GỬI TRỌN YÊU THƯƠNG THUẦN KHIẾT
+                HIỆN ĐẠI MÀ VẪN TRANG NGHIÊM
               </h4>
             </div>
           </div>
@@ -217,8 +233,7 @@ const ModernZenResortSection = () => {
                   lineHeight: 1.4
                 }}
               >
-                 
-                 MODERN ZEN
+                 ELEGANT CONTEMPORARY
               </h2>
               <p 
                 className="text-xl md:text-2xl lg:text-3xl"
@@ -228,7 +243,7 @@ const ModernZenResortSection = () => {
                   fontWeight: 700
                 }}
               >
-               Tối Giản – Thanh Tịnh – Sang Nhã
+               Tinh Tế – Sang Trọng – Hiện Đại
               </p>
             </div>
   
@@ -238,13 +253,19 @@ const ModernZenResortSection = () => {
                 className="text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-800"
                 style={{ fontFamily: "'Arima Madurai', sans-serif" }}
               >
-               Lấy cảm hứng từ tinh thần Thiền hiện đại (Modern Zen), gói dịch vụ mang đến không gian cưới thanh thoát và an nhiên giữa nhịp sống hiện đại.
+               Là gói dịch vụ mang phong cách Elegant Contemporary, kết hợp hài hòa giữa nét trang nghiêm của lễ Hằng Thuận và không khí tiệc cưới rực rỡ, thời thượng.
+              </p>
+              <p 
+                className="text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-800"
+                style={{ fontFamily: "'Arima Madurai', sans-serif" }}
+              >
+                Không gian được phủ bởi sắc trắng thanh khiết – ánh vàng kim sang trọng – tông pastel nhẹ nhàng, tạo nên tổng thể vừa tinh tế, vừa tràn đầy năng lượng hạnh phúc.
               </p>
               <p 
                 className="text-base md:text-lg lg:text-xl text-gray-800"
                 style={{ fontFamily: "'Arima Madurai', sans-serif" }}
               >
-                Mỗi chi tiết được sắp đặt tinh gọn và tinh tế, hòa quyện giữa gỗ mộc – lá xanh – sắc trắng để tạo nên buổi lễ Hằng Thuận tràn đầy năng lượng bình an, giản dị mà vẫn sang trọng.
+                Mỗi chi tiết được chăm chút tỉ mỉ, từ ánh sáng, hoa tươi đến chất liệu trang trí, để buổi lễ trở thành bản giao hòa giữa truyền thống và hiện đại, nơi tình yêu được chúc phúc trong sự lộng lẫy và an nhiên.
               </p>
             </div>
           </div>
@@ -263,5 +284,5 @@ const ModernZenResortSection = () => {
   );
 };
 
-export default ModernZenResortSection;
+export default ElegantSection;
 

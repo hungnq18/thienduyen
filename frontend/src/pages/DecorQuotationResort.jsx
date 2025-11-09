@@ -1,41 +1,42 @@
 import DecorationResortHeader from '../components/DecorationResortHeader';
-import LotusConceptSection from '../components/LotusConceptSection';
+import ElegantSection from '../components/ElegentSection';
 import ModernZenResortSection from '../components/ModernZenResortSection';
-import SimpleConceptSection from '../components/SimpleConceptSection';
+import NatureSection from '../components/NatureSection';
 
 export default function DecorQuotationPage() {
   const handlePackageClick = (pkg) => {
     // Map package names to section IDs
     const sectionMap = {
-      'GÓI TRUYỀN THỐNG': 'traditional-section',
-      'GÓI THIỀN': 'simple-section',
-      'GÓI SEN': 'lotus-section',
-      'MODERN ZEN': 'modern-zen-section',
+      
+      
+      'GÓI MODERN ZEN': 'modern-zen-section',
+      'GÓI ELEGANT CONTEMPORARY': 'elegant-section',
+      'GÓI NATURE FUSION': 'nature-section',
     };
 
     const sectionId = sectionMap[pkg.name];
     if (sectionId) {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      // Use setTimeout to ensure DOM is ready
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     }
   };
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen" style={{ scrollBehavior: 'smooth' }}>
       <DecorationResortHeader onPackageClick={handlePackageClick} />
-      <div id="traditional-section">
+      <div id="modern-zen-section" style={{ scrollMarginTop: '80px' }}>
         <ModernZenResortSection />
       </div>
-      <div id="simple-section">
-        <SimpleConceptSection />
+      <div id="elegant-section" style={{ scrollMarginTop: '80px' }}>
+        <ElegantSection />
       </div>
-      <div id="lotus-section">
-        <LotusConceptSection />
-      </div>
-      <div id="modern-zen-section">
-        <ModernZenResortSection />
+      <div id="nature-section" style={{ scrollMarginTop: '80px' }}>
+        <NatureSection />
       </div>
     </main>
   );

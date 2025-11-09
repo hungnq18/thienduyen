@@ -1,49 +1,65 @@
 import { useNavigate } from 'react-router-dom';
 
-const ModernZenResortSection = () => {
+const NatureSection = () => {
   const navigate = useNavigate();
   
   const includedItems = [
     {
-      title: 'Cổng tre mộc điểm hoa trắng, lá xanh; bảng gỗ khắc "Lễ Hằng Thuận".',
+      title: 'Cổng chào: vòm hoa lá xanh, thêm hoa sen hoặc mandala Phật giáo.',
       description: '',
     },
     {
-      title: 'Bàn lễ tân phù khăn bố be, lọ gốm cắm sen trắng, bảng welcome và backdrop vách tre, chữ thư pháp thanh nhã.',
+      title: 'Biển Welcome: bảng gỗ rustic đặt giữa vườn cây.',
       description: '',
     },
     {
-      title: 'Bàn gỗ phủ khăn trắng, điểm hoa sen; lối đi trải chiếu cói, hai bên đèn gỗ và chậu cây xanh.',
+      title: 'Bàn lễ tân: gỗ mộc, hoa lá xanh + nến trắng.',
       description: '',
     },
     {
-      title: 'Không gian giản dị mà trang nghiêm, giữ trọn tỉnh thần an nhiên trong từng chi tiết.',
+      title: 'Backdrop chụp hình: khung gỗ + dây lá xanh, view thiên nhiên phía sau.',
       description: '',
     },
     {
-      title: 'Bàn tiệc cắm hoa trắng, lá xanh; sân khấu khung gỗ, ánh vàng ấm; bánh cưới trắng tinh giản, điểm chút lá xanh thanh khiết.',
+      title: 'Sân khấu / Bàn nghi lễ: khung tre/gỗ, hoa lá xanh, view thiên nhiên làm background.',
       description: '',
     },
     {
-      title: 'Thiệp mời, menu, biển chỉ dẫn theo tông be – xanh lá, họa tiết tre gỗ tự nhiên, tinh tế và hài hòa.',
+      title: 'Lối đi chính: đường trải hoa tươi, thắp nến dọc lối đi.',
+      description: '',
+    },
+    {
+      title: 'Ghế khách: ghế gỗ, hoa lá xanh cài sau lưng ghế.',
+      description: '',
+    },
+    {
+      title: 'Hoa bàn tiệc: lọ thủy tinh cắm hoa dại trắng – xanh.',
+      description: '',
+    },
+    {
+      title: 'Sân khấu tiệc: ánh sáng vàng nhẹ, giữ cảnh quan thiên nhiên.',
+      description: '',
+    },
+    {
+      title: 'Bánh cưới: kiểu rustic, naked cake, hoa lá trang trí tự nhiên.',
       description: '',
     },
   ];
 
   const leftSideImages = [
     {
-      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762699011/Rectangle_4560_1_hrblxj.png',
+      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762705403/Rectangle_4560_3_thkpuu.png',
       alt: 'Chi tiết trang trí',
     },
   ];
 
   const displayItemImages = [
     {
-      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762702263/Rectangle_4563_woueae.png',
+      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762705630/Rectangle_4563_2_oaoeyw.png',
       alt: 'Tay cầm đĩa với cupcake và trái cây',
     },
     {
-      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762702300/Rectangle_4564_abxqnb.png',
+      src: 'https://res.cloudinary.com/dijayprrw/image/upload/v1762705703/Rectangle_4564_2_ml2g9a.png',
       alt: 'Sách Lễ Hằng Thuận',
     },
   ];
@@ -56,8 +72,8 @@ const ModernZenResortSection = () => {
           <div className="relative w-full h-[400px] md:h-[600px] rounded-lg overflow-visible">
             <div className="relative w-full h-full rounded-lg overflow-hidden">
               <img
-                src="https://res.cloudinary.com/dijayprrw/image/upload/v1762698387/Vector_1_ahipyo.png"
-                alt="Concept Modern Zen"
+                src="https://res.cloudinary.com/dijayprrw/image/upload/v1762705340/Vector_6_vojvk3.png"
+                alt="Concept nature"
                 className="w-full h-full object-cover"
               />
               {/* Title Overlay */}
@@ -75,8 +91,8 @@ const ModernZenResortSection = () => {
                     margin: 0,
                   }}
                 >
-                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>MODERN ZEN</span>
-                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>THIỀN HIỆN ĐẠI</span>
+                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>NATURE FUSION -  </span>
+                  <span style={{ whiteSpace: 'nowrap', display: 'block' }}>HOÀ QUYỆN THIÊN NHIÊN</span>
                 </h2>
               </div>
             </div>
@@ -152,7 +168,7 @@ const ModernZenResortSection = () => {
 
         {/* Display Items Section */}
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 px-6 md:px-8 pb-8 md:pb-12 justify-center items-center">
-          <div className="w-auto max-w-fit bg-[#8B4513] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
+          <div className="w-auto max-w-fit bg-[#A0522D] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
             <div className="text-center">
               <h4 
                 className="text-base md:text-lg lg:text-xl text-white uppercase whitespace-nowrap"
@@ -161,11 +177,11 @@ const ModernZenResortSection = () => {
                   fontWeight: 900
                 }}
               >
-                HOÀ QUYỆN THIỀN VÀ LỄ
+                GẦN GŨI TRONG TỪNG HƠI THỞ
               </h4>
             </div>
           </div>
-          <div className="w-auto max-w-fit bg-[#8B4513] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
+          <div className="w-auto max-w-fit bg-[#A0522D] rounded-3xl py-1.5 md:py-2 px-4 md:px-6">
             <div className="text-center">
               <h4 
                 className="text-base md:text-lg lg:text-xl text-white uppercase whitespace-nowrap"
@@ -174,7 +190,7 @@ const ModernZenResortSection = () => {
                   fontWeight: 900
                 }}
               >
-                GỬI TRỌN YÊU THƯƠNG THUẦN KHIẾT
+                HOÀ MÌNH GIỮA SẮC THIÊN NHIÊN
               </h4>
             </div>
           </div>
@@ -217,8 +233,7 @@ const ModernZenResortSection = () => {
                   lineHeight: 1.4
                 }}
               >
-                 
-                 MODERN ZEN
+                 NATURE FUSION
               </h2>
               <p 
                 className="text-xl md:text-2xl lg:text-3xl"
@@ -228,7 +243,7 @@ const ModernZenResortSection = () => {
                   fontWeight: 700
                 }}
               >
-               Tối Giản – Thanh Tịnh – Sang Nhã
+               Mộc Mạc – Tinh Tế – Hòa Quyện Thiên Nhiên
               </p>
             </div>
   
@@ -238,13 +253,19 @@ const ModernZenResortSection = () => {
                 className="text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-800"
                 style={{ fontFamily: "'Arima Madurai', sans-serif" }}
               >
-               Lấy cảm hứng từ tinh thần Thiền hiện đại (Modern Zen), gói dịch vụ mang đến không gian cưới thanh thoát và an nhiên giữa nhịp sống hiện đại.
+               Là gói dịch vụ mang tinh thần an nhiên và tự do, lấy cảm hứng từ vẻ đẹp của đất trời, cây cỏ và ánh sáng tự nhiên.
+              </p>
+              <p 
+                className="text-base md:text-lg lg:text-xl mb-4 md:mb-6 text-gray-800"
+                style={{ fontFamily: "'Arima Madurai', sans-serif" }}
+              >
+                Không gian lễ cưới được sắp đặt hài hòa giữa sắc xanh tươi mát – trắng tinh khôi – nâu gỗ ấm áp, tạo nên cảm giác gần gũi mà vẫn trang trọng.
               </p>
               <p 
                 className="text-base md:text-lg lg:text-xl text-gray-800"
                 style={{ fontFamily: "'Arima Madurai', sans-serif" }}
               >
-                Mỗi chi tiết được sắp đặt tinh gọn và tinh tế, hòa quyện giữa gỗ mộc – lá xanh – sắc trắng để tạo nên buổi lễ Hằng Thuận tràn đầy năng lượng bình an, giản dị mà vẫn sang trọng.
+                Mỗi chi tiết đều hướng đến sự cân bằng và tinh tế, nơi tình yêu được chúc phúc giữa thiên nhiên trong lành và tiếng chuông chùa ngân vang.
               </p>
             </div>
           </div>
@@ -263,5 +284,5 @@ const ModernZenResortSection = () => {
   );
 };
 
-export default ModernZenResortSection;
+export default NatureSection;
 
