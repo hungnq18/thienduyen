@@ -1,5 +1,8 @@
 
+import { useNavigate } from 'react-router-dom';
+
 function CoordinatorQuotation() {
+  const navigate = useNavigate();
      const sections = [
     {
       title: "Tư vấn chương trình",
@@ -67,7 +70,10 @@ function CoordinatorQuotation() {
       </div>
 
       <div className="mt-10">
-        <button className="bg-[#8B3E2E] hover:bg-[#6B2F22] text-white px-8 py-5 rounded-xl text-lg font-semibold shadow-md transition-all ">
+        <button 
+          onClick={() => navigate('/contact')}
+          className="bg-[#8B3E2E] hover:bg-[#6B2F22] text-white px-8 py-5 rounded-xl text-lg font-semibold shadow-md transition-all "
+        >
           ĐĂNG KÍ TƯ VẤN NGAY
         </button>
       </div>

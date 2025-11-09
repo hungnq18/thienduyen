@@ -20,11 +20,13 @@ export default function DecorQuotation() {
           <DecorServiceCard
             title="DECOR TẠI CHÙA"
             image="https://res.cloudinary.com/dijayprrw/image/upload/v1760881159/Rectangle_4543_h93ehc.png"
+            link="/decor-quotation"
           />
           <DecorServiceCard
             title="DECOR TẠI RESORT"
             image="https://res.cloudinary.com/dijayprrw/image/upload/v1760881791/Rectangle_4546_oihwu3.png"
             description="Trang trí tiệc cưới tại resort với không gian thoáng đãng và hiện đại"
+            link="/decor-quotation-resort"
           />
         </div>
       </section>

@@ -76,7 +76,7 @@ function PlanningQuotation() {
 
       <div className="mt-10">
         <button className="bg-[#8B3E2E] hover:bg-[#6B2F22] text-white px-8 py-5 rounded-xl text-lg font-semibold shadow-md transition-all"
-        Onclick={() => {navigate('/contact')}}>
+        onClick={() => {navigate('/contact')}}>
           ĐĂNG KÍ TƯ VẤN NGAY
         </button>
       </div>

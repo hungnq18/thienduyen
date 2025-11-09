@@ -7,9 +7,15 @@ function QuotationPage() {
   return (
     <div>
    <HeaderQuotationSection /> 
-    <PlanningQuotation/>
-    <DecorQuotation />
-    <CoordinatorQuotation />
+    <div id="planning-section">
+      <PlanningQuotation/>
+    </div>
+    <div id="decor-section">
+      <DecorQuotation />
+    </div>
+    <div id="coordinator-section">
+      <CoordinatorQuotation />
+    </div>
 </div>
   )
 }

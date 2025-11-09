@@ -1,11 +1,22 @@
+import { Link } from 'react-router-dom';
 
-export default function DecorServiceCard({ title, image }) {
-  return (
-    <div className="bg-white shadow-lg rounded-2xl overflow-hidden  hover:shadow-xl transition-shadow">
+export default function DecorServiceCard({ title, image, link, onClick }) {
+  const content = (
+    <div className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-shadow cursor-pointer">
       <img src={image} alt={title} className="w-full object-cover p-4 px-5" />
       <div className="p-6 text-center">
         <h3 className="bg-red-900 text-2xl font-semibold text-white mb-3">{title}</h3>
       </div>
     </div>
   );
+
+  if (link) {
+    return <Link to={link}>{content}</Link>;
+  }
+
+  if (onClick) {
+    return <div onClick={onClick}>{content}</div>;
+  }
+
+  return content;
 }

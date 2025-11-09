@@ -10,6 +10,8 @@ import BlogPost1 from './pages/BlogPost1';
 import BlogPost2 from './pages/BlogPost2';
 import BlogPost3 from './pages/BlogPost3';
 import ContactPage from './pages/ContactPage';
+import DecorQuotationPage from './pages/DecorQuotationPage';
+import DecorQuotationResortPage from './pages/DecorQuotationResort';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/Login';
 import QuotationPage from './pages/QuotationPage';
@@ -35,6 +37,8 @@ function App() {
           <Route path="/services/1" element={<PlanningQuotation />} />
           <Route path="/services/2" element={<DecorQuotation />} />
           <Route path="/services/3" element={<CoordinatorQuotation />} />
+          <Route path="/decor-quotation" element={<DecorQuotationPage />} />
+          <Route path="/decor-quotation-resort" element={<DecorQuotationResortPage />} />
           {/* 404 route phải ở cuối cùng */}
           <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
