@@ -7,8 +7,6 @@ export default function DecorQuotationPage() {
   const handlePackageClick = (pkg) => {
     // Map package names to section IDs
     const sectionMap = {
-      
-      
       'GÓI MODERN ZEN': 'modern-zen-section',
       'GÓI ELEGANT CONTEMPORARY': 'elegant-section',
       'GÓI NATURE FUSION': 'nature-section',
