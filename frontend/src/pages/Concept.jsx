@@ -41,8 +41,8 @@ const Concept = () => {
                 activeView === "temple" ? "ring-2 ring-offset-2 ring-[#7A1F1F]" : ""
               }`}
               style={{
-                backgroundColor: activeView === "temple" ? "#7A1F1F" : "#7A1F1F",
-                color: "#FFFFFF",
+                backgroundColor: activeView === "temple" ? "#700304" : "#E5DED3",
+                color: activeView === "temple" ? "#FFFFFF" : "#3F2B20",
                 fontFamily: "'Arima Madurai', sans-serif",
                 fontSize: "clamp(0.875rem, 2vw, 1.125rem)",
                 fontWeight: 600,
@@ -56,11 +56,11 @@ const Concept = () => {
             <button
               onClick={handleResortClick}
               className={`w-full sm:w-auto px-8 sm:px-12 md:px-16 py-4 sm:py-5 md:py-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg ${
-                activeView === "resort" ? "ring-2 ring-offset-2 ring-[#8B4513]" : ""
+                activeView === "resort" ? "ring-2 ring-offset-2 ring-[#700304]" : ""
               }`}
               style={{
-                backgroundColor: activeView === "resort" ? "#E5DED3" : "#E5DED3",
-                color: "#3F2B20",
+                backgroundColor: activeView === "resort" ? "#700304" : "#E5DED3",
+                color: activeView === "resort" ? "#FFFFFF" : "#3F2B20",
                 fontFamily: "'Arima Madurai', sans-serif",
                 fontSize: "clamp(0.875rem, 2vw, 1.125rem)",
                 fontWeight: 600,

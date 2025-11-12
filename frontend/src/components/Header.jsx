@@ -1,13 +1,147 @@
 import { LogOut, User } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.svg'; // logo của bạn
 import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { user, logout, isAuthenticated } = useAuth();
+
+  // Keyword mapping to routes
+  const keywordMap = {
+    // Trang chủ
+    'trang chủ': '/',
+    'homepage': '/',
+    'home': '/',
+    'thiện duyên': '/',
+    
+    // Giới thiệu
+    'about': '/about',
+    'giới thiệu': '/about',
+    'về thiện duyên': '/about',
+    'đội ngũ': '/about',
+    'founder': '/about',
+    'team': '/about',
+    
+    // Dịch vụ chính
+    'dịch vụ': '/services',
+    'service': '/services',
+    'lễ hằng thuận': '/services',
+    'lễ cưới phật giáo': '/services',
+    'spiritual wedding': '/services',
+    'wedding ceremony': '/services',
+    'nghi lễ cưới': '/services',
+    'resort wedding': '/services',
+    'lễ tại chùa': '/services',
+    'tổ chức lễ': '/services',
+    
+    // Gói lễ / Báo giá
+    'báo giá': '/quotation',
+    'giá': '/quotation',
+    'gói': '/quotation',
+    'quotation': '/quotation',
+    'package': '/quotation',
+    'cost': '/quotation',
+    'chi phí': '/quotation',
+    'giá lễ hằng thuận': '/quotation',
+    'basic': '/quotation',
+    'delux': '/quotation',
+    'premium': '/quotation',
+    'chùa': '/quotation',
+    'chùa hà nội': '/quotation',
+    'thiền': '/quotation',
+    'resort': '/quotation',
+    'phong cách': '/quotation',
+    'minimal': '/quotation',
+    'truyền thống': '/quotation',
+    'phật giáo': '/quotation',
+    'bao nhiêu': '/quotation',
+    
+    // Blog / Kiến thức
+    'blog': '/blog',
+    'tin tức': '/blog',
+    'bài viết': '/blog',
+    'chuyện cưới': '/blog',
+    'câu chuyện': '/blog',
+    'kiến thức': '/blog',
+    'ý nghĩa lễ hằng thuận': '/blog',
+    'wedding stories': '/blog',
+    
+    // Liên hệ / Đăng ký
+    'liên hệ': '/contact',
+    'contact': '/contact',
+    'đăng ký': '/register',
+    'đăng nhập': '/login',
+    'tư vấn': '/contact',
+    'get in touch': '/contact',
+    'đặt lịch': '/contact',
+    'đặt lễ': '/contact',
+    'hỗ trợ': '/contact',
+    'kết nối': '/contact',
+    
+    // FAQ (nếu có route)
+    'faq': '/',
+    'hỏi đáp': '/',
+    'thắc mắc': '/',
+    'hướng dẫn': '/',
+    'chuẩn bị lễ': '/',
+    'quy trình': '/',
+    'tư vấn cưới': '/',
+    'là gì': '/',
+    
+    // Workshop / Sự kiện (nếu có route)
+    'workshop': '/',
+    'khóa học': '/',
+    'sự kiện': '/',
+    'chia sẻ': '/',
+    'nghi lễ thử': '/',
+    'wedding experience': '/',
+    
+    // Dự án / Chiến dịch (nếu có route)
+    'gieo duyên': '/',
+    'dự án gieo duyên': '/',
+    'couple with purpose': '/',
+    'mini documentary': '/',
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
+    const query = searchQuery.toLowerCase().trim();
+    
+    // Check exact match first
+    if (keywordMap[query]) {
+      navigate(keywordMap[query]);
+      setSearchQuery('');
+      setMenuOpen(false); // Close mobile menu
+      return;
+    }
+    
+    // Check partial match
+    for (const [keyword, route] of Object.entries(keywordMap)) {
+      if (query.includes(keyword) || keyword.includes(query)) {
+        navigate(route);
+        setSearchQuery('');
+        setMenuOpen(false); // Close mobile menu
+        return;
+      }
+    }
+    
+    // If no match found, stay on current page or show message
+    // You can add a toast notification here if needed
+    setSearchQuery('');
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch(e);
+    }
+  };
 
   const isActive = (path) => {
     if (path === '/' && location.pathname === '/') return true;
@@ -36,18 +170,21 @@ const Header = () => {
 
         {/* Search Bar */}
         <div className="hidden md:flex w-full max-w-[300px] lg:max-w-[300px] ml-4 lg:ml-6">
-          <div className="relative w-full">
+          <form onSubmit={handleSearch} className="relative w-full">
             <div className="bg-[#F8FBF2] rounded-full px-4 py-2 flex items-center gap-2">
               <svg className="w-5 h-5 text-[#334024]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
                 type="text"
-                placeholder="Search for..."
+                placeholder="Tìm kiếm..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
                 className="flex-1 bg-transparent text-[#334024] placeholder-[#334024] font-['DM_Sans'] text-base outline-none"
               />
             </div>
-          </div>
+          </form>
         </div>
 
         {/* Auth links */}
@@ -122,6 +259,25 @@ const Header = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="absolute top-[100px] left-0 w-full bg-[#610912] z-50 flex flex-col items-center gap-6 py-6 border-t border-white/20 transition-all duration-300 md:hidden">
+          {/* Mobile Search Bar */}
+          <div className="w-full max-w-[280px] px-4">
+            <form onSubmit={handleSearch} className="relative w-full">
+              <div className="bg-[#F8FBF2] rounded-full px-4 py-2 flex items-center gap-2">
+                <svg className="w-5 h-5 text-[#334024]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="flex-1 bg-transparent text-[#334024] placeholder-[#334024] font-['DM_Sans'] text-sm outline-none"
+                />
+              </div>
+            </form>
+          </div>
+          
           {[
             { to: '/', label: 'Homepage' },
             { to: '/about', label: 'About us' },
