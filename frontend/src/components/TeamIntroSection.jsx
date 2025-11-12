@@ -1,41 +1,41 @@
+import HaImage from '../assets/ha.jpg';
+import LinhImage from '../assets/Linh.jpg';
+import LyImage from '../assets/Ly.jpg';
+import PhuongImage from '../assets/phuong.jpg';
+import TraImage from '../assets/tra.jpg';
 const members = [
   {
     name: 'Nguyen Dieu Linh',
     role: 'Chief Executive Officer',
-    avatar:
-      'https://res.cloudinary.com/dijayprrw/image/upload/v1761729835/Rectangle_4576_nxijmm.png',
+    avatar: LinhImage,
     bio:
       'Là người luôn ấp ủ mong muốn gìn giữ và lan tỏa những giá trị văn hóa Việt trong đời sống hiện đại, cô định hình tầm nhìn phát triển bền vững cho Thiện Duyên – một không gian nơi nghi lễ và giá trị nhân bản hòa quyện. Với sự tinh tế và thấu hiểu, Linh đặt con người làm trung tâm cho mọi hoạt động và trải nghiệm, kiến tạo một hành trình kết nối, giúp đôi uyên ương khởi đầu chặng đường mới trọn vẹn và an yên.'
   },
   {
     name: 'Nguyen Thanh Tra',
     role: 'Chief Financial Officer',
-    avatar:
-      'https://res.cloudinary.com/dijayprrw/image/upload/v1761730144/Rectangle_4577_vbnnsh.png',
+    avatar: TraImage,
     bio:
       'Giữ vai trò “người giữ nhịp” tài chính tại Thiện Duyên, Trà mang đến cân bằng giữa giá trị tinh thần và vận hành thực tiễn. Tư duy vững và kỹ luật cao bảo chứng cho từng nguồn lực được sử dụng hiệu quả, bền vững, đảm bảo mỗi buổi lễ đều được tổ chức chỉnh chu, trọn vẹn và yên bình.'
   },
   {
     name: 'Hoang Lan Phuong',
-    role: 'Partner Relationship Management',
-    avatar:
-      'https://res.cloudinary.com/dijayprrw/image/upload/v1761730252/Rectangle_4578_wfyltw.png',
+    role: 'Chief Product Officer',
+    avatar: PhuongImage,
     bio:
-      'Là cầu nối giữa Thiện Duyên và các đối tác – cô xem mỗi mối quan hệ là một hành duyên đáng quý. Sự chân thành, thấu hiểu và tinh tế giúp Lan Phương mang lại hợp tác bền vững, hiệu quả, đồng thời dựng xây mạng lưới tin cậy để mỗi buổi lễ luôn được chuẩn bị chu đáo đến từng chi tiết.'
+      'Là người giữ vai trò định hình và vận hành toàn bộ trải nghiệm lễ cưới của Thiện Duyên, Lan Phương xem mỗi buổi lễ như một “tác phẩm tâm linh” cần được chăm chút trọn vẹn từ ý tưởng đến cảm xúc. Với sự tinh tế, tỉ mỉ và thấu hiểu, cô đảm bảo mọi nghi thức, không gian và quy trình vận hành đều diễn ra hài hòa, thiêng liêng và hoàn hảo – để mỗi cặp đôi đều cảm nhận được “duyên lành” trong ngày trọng đại của mình.'
   },
   {
     name: 'Vo Thu Ha',
     role: 'Chief Marketing Officer',
-    avatar:
-      'https://res.cloudinary.com/dijayprrw/image/upload/v1761730400/Rectangle_4579_gc1avv.png',
+    avatar: HaImage,
     bio:
       'Mang tinh thần sáng tạo và yêu thích giá trị văn hóa, Hà kể những câu chuyện thương hiệu truyền cảm hứng về Lễ Hằng Thuận theo cách gần gũi, hiện đại. Mỗi chiến dịch đều được cô xây dựng bằng sự thấu cảm và tinh tế – để mọi khoảnh khắc đều chạm đến trái tim người đón nhận.'
   },
   {
     name: 'Pham Quynh Ly',
     role: 'Chief Commercial Officer',
-    avatar:
-      'https://res.cloudinary.com/dijayprrw/image/upload/v1761730519/Rectangle_4580_ahprum.png',
+    avatar: LyImage,
     bio:
       'Với tư duy dịch vụ hướng đến giá trị bền vững, Quỳnh Ly chú trọng từng trải nghiệm của khách hàng – từ lắng nghe đến đồng hành trong suốt hành trình chuẩn bị lễ cưới. Cô tin rằng sự an tịnh và tử tế trong phục vụ chính là nền tảng của một ngày trọng đại trọn vẹn.'
   }

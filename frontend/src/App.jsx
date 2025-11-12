@@ -9,6 +9,7 @@ import BlogPage from './pages/BlogPage';
 import BlogPost1 from './pages/BlogPost1';
 import BlogPost2 from './pages/BlogPost2';
 import BlogPost3 from './pages/BlogPost3';
+import Concept from './pages/Concept';
 import ContactPage from './pages/ContactPage';
 import DecorQuotationPage from './pages/DecorQuotationPage';
 import DecorQuotationResortPage from './pages/DecorQuotationResort';
@@ -39,6 +40,7 @@ function App() {
           <Route path="/services/3" element={<CoordinatorQuotation />} />
           <Route path="/decor-quotation" element={<DecorQuotationPage />} />
           <Route path="/decor-quotation-resort" element={<DecorQuotationResortPage />} />
+          <Route path="/concept" element={<Concept />} />
           {/* 404 route phải ở cuối cùng */}
           <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>

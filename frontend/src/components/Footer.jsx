@@ -34,7 +34,7 @@ const Footer = () => {
           <div className="space-y-2 text-lg" style={{ fontFamily: "Arimo, sans-serif", fontWeight: 400 }}>
             <p>Trường Đại học FPT</p>
             <p>Điện thoại: 091 338 3603</p>
-            <p>Email: thienduyenwedding@gmail.com</p>
+            <p>Email: Thienduyenceremony@gmail.com</p>
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import rounder from "../assets/rounder.png";
 
 const decorationFeatures = [
@@ -19,6 +20,8 @@ const decorationFeatures = [
 ];
 
 function DecorationServiceSection() {
+  const navigate = useNavigate();
+
   return (
     <section className="relative w-full mt-[850px] sm:mt-80 md:mt-90 lg:mt-100">
       {/* Background Image */}
@@ -94,6 +97,7 @@ function DecorationServiceSection() {
                 letterSpacing: "0.05em",
                 borderRadius: "0",
               }}
+              onClick={() => navigate('/concept')}
             >
               XEM THÊM
             </button>

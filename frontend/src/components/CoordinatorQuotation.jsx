@@ -1,6 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
-
+import coordinator from '../assets/dieu-phoi.png';
 function CoordinatorQuotation() {
   const navigate = useNavigate();
      const sections = [
@@ -43,7 +43,7 @@ function CoordinatorQuotation() {
   return (
     <div className="w-full py-10">
     <div className="px-4 flex justify-center items-center ">
-      <img src="https://res.cloudinary.com/dijayprrw/image/upload/v1760882979/Rectangle_4541_1_pyhc91.png" alt="Planning Quotation" 
+      <img src={coordinator} alt="Planning Quotation" 
       className="rounded-3xl"/>
     </div>
     <div className=" text-gray-800 px-6 sm:px-10 lg:px-20 py-16 leading-relaxed">
