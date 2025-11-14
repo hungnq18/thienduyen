@@ -33,9 +33,17 @@ export default function LoginPage() {
         // Show success toast
         showToast(`Chào mừng ${response.data.user.fullName}! Đăng nhập thành công.`, "success")
         
+        // Check if there's a redirect path from sessionStorage
+        const redirectPath = sessionStorage.getItem('redirectAfterLogin')
+        
         // Redirect after a short delay
         setTimeout(() => {
-          navigate("/")
+          if (redirectPath) {
+            sessionStorage.removeItem('redirectAfterLogin')
+            navigate(redirectPath)
+          } else {
+            navigate("/")
+          }
         }, 1500)
       }
     } catch (err) {

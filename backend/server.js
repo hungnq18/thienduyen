@@ -9,14 +9,21 @@ dotenv.config();
 // Import routes
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chat.routes');
+const contactRoutes = require('./routes/contact.routes');
 
 // Initialize express app
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// CORS configuration - allow requests from frontend
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || process.env.CORS_ORIGIN || '*',
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -27,10 +34,16 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Log registered routes
 console.log('📋 Registered routes:');
 console.log('   POST /api/chat/message');
+console.log('   POST /api/contact/send');
+console.log('   GET  /api/contact/my-contacts');
+console.log('   GET  /api/contact (admin)');
+console.log('   GET  /api/contact/:id (admin)');
+console.log('   PATCH /api/contact/:id/status (admin)');
 console.log('   GET  /api/health');
 
 // Health check route
@@ -59,6 +72,11 @@ app.use((req, res) => {
     message: `Route not found: ${req.method} ${req.path}`,
     availableRoutes: [
       'POST /api/chat/message',
+      'POST /api/contact/send',
+      'GET  /api/contact/my-contacts',
+      'GET  /api/contact (admin)',
+      'GET  /api/contact/:id (admin)',
+      'PATCH /api/contact/:id/status (admin)',
       'GET /api/chat/test',
       'GET /api/health'
     ]

@@ -18,7 +18,7 @@ exports.protect = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         status: 'error',
-        message: 'Not authorized to access this route. Please login.'
+        message: 'Vui lòng đăng nhập để tiếp tục.'
       });
     }
 
@@ -32,7 +32,7 @@ exports.protect = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({
           status: 'error',
-          message: 'User not found. Token is invalid.'
+          message: 'Người dùng không tồn tại. Token không hợp lệ.'
         });
       }
 
@@ -40,7 +40,7 @@ exports.protect = async (req, res, next) => {
       if (!user.isActive) {
         return res.status(401).json({
           status: 'error',
-          message: 'Your account has been deactivated.'
+          message: 'Tài khoản của bạn đã bị vô hiệu hóa.'
         });
       }
 
@@ -50,7 +50,7 @@ exports.protect = async (req, res, next) => {
     } catch (error) {
       return res.status(401).json({
         status: 'error',
-        message: 'Token is invalid or has expired. Please login again.'
+        message: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.'
       });
     }
   } catch (error) {
