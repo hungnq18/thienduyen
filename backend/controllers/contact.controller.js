@@ -65,6 +65,9 @@ const createTransporter = () => {
       tls: {
         rejectUnauthorized: process.env.NODE_ENV === 'production',
       },
+      connectionTimeout: 20000, // 20 seconds
+      greetingTimeout: 20000, // 20 seconds
+      socketTimeout: 20000, // 20 seconds
       debug: process.env.NODE_ENV === 'development',
       logger: process.env.NODE_ENV === 'development',
     });
@@ -84,9 +87,39 @@ const createTransporter = () => {
     tls: {
       rejectUnauthorized: process.env.NODE_ENV === 'production',
     },
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000, // 10 seconds
+    socketTimeout: 10000, // 10 seconds
     debug: process.env.NODE_ENV === 'development',
     logger: process.env.NODE_ENV === 'development',
   });
+};
+
+// Retry helper with exponential backoff
+const retryWithBackoff = async (fn, maxRetries = 3, initialDelay = 1000) => {
+  let lastError;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      // Don't retry on authentication errors
+      if (error.code === 'EAUTH') {
+        throw error;
+      }
+      // Retry on timeout or connection errors
+      if (error.code === 'ETIMEDOUT' || error.code === 'ETIMEOUT' || error.code === 'ECONNECTION') {
+        if (attempt < maxRetries - 1) {
+          const delay = initialDelay * Math.pow(2, attempt);
+          console.log(`⚠️  Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+      }
+      throw error;
+    }
+  }
+  throw lastError;
 };
 
 // Send contact form email
@@ -202,12 +235,16 @@ const sendContactEmail = async (req, res) => {
     };
 
     try {
-      // Verify connection first
-      await transporter.verify();
-      console.log('✅ SMTP connection verified successfully');
+      // Verify connection first with retry
+      await retryWithBackoff(async () => {
+        await transporter.verify();
+        console.log('✅ SMTP connection verified successfully');
+      }, 2, 2000);
       
-      // Send admin email with detailed response logging
-      const adminResponse = await transporter.sendMail(adminMailOptions);
+      // Send admin email with detailed response logging and retry
+      const adminResponse = await retryWithBackoff(async () => {
+        return await transporter.sendMail(adminMailOptions);
+      }, 3, 1000);
       console.log('📨 Admin email SMTP response:', {
         messageId: adminResponse.messageId,
         response: adminResponse.response,
@@ -231,8 +268,10 @@ const sendContactEmail = async (req, res) => {
       
       console.log('✅ Admin email accepted by SMTP server (may still be queued)');
       
-      // Send user confirmation email with detailed response logging
-      const userResponse = await transporter.sendMail(userMailOptions);
+      // Send user confirmation email with detailed response logging and retry
+      const userResponse = await retryWithBackoff(async () => {
+        return await transporter.sendMail(userMailOptions);
+      }, 3, 1000);
       console.log('📨 User email SMTP response:', {
         messageId: userResponse.messageId,
         response: userResponse.response,
@@ -303,6 +342,15 @@ const sendContactEmail = async (req, res) => {
         console.error('   1. Kiểm tra SMTP_HOST và SMTP_PORT đúng chưa');
         console.error('   2. Kiểm tra firewall/network không chặn port 587');
         console.error('   3. Thử port 465 với SMTP_SECURE=true');
+      } else if (emailError.code === 'ETIMEDOUT' || emailError.code === 'ETIMEOUT') {
+        errorMessage = 'Kết nối đến SMTP server bị timeout. Vui lòng thử lại sau hoặc kiểm tra kết nối mạng.';
+        console.error('💡 Troubleshooting ETIMEDOUT:');
+        console.error('   1. Kiểm tra kết nối mạng của server');
+        console.error('   2. Kiểm tra SMTP server có đang hoạt động không');
+        console.error('   3. Kiểm tra firewall có chặn kết nối không');
+        console.error('   4. Thử tăng timeout hoặc kiểm tra DNS resolution');
+        console.error(`   ${emailConfig.smtpHost.key}:`, emailConfig.smtpHost.value || 'NOT SET');
+        console.error(`   ${emailConfig.smtpPort.key}:`, emailConfig.smtpPort.value || 'NOT SET');
       }
       
       // Contact is already saved, so we still return success

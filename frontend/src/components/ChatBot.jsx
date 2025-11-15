@@ -523,7 +523,7 @@ const ChatBot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 z-50 w-[320px] h-[450px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-white rounded-lg shadow-2xl flex flex-col border border-gray-200 animate-chatBotSlideIn" style={{ position: 'fixed', zIndex: 50, width: '320px', height: '450px', maxWidth: '320px', maxHeight: '450px' }}>
+        <div className="fixed bottom-20 right-4 z-50 w-[320px] h-[450px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-transparent rounded-lg shadow-2xl flex flex-col border border-gray-200 animate-chatBotSlideIn" style={{ position: 'fixed', zIndex: 50, width: '320px', height: '450px', maxWidth: '320px', maxHeight: '450px' }}>
           {/* Header */}
           <div className="bg-[#610912] text-[#F8FBF2] px-4 py-3 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-3">

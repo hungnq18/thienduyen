@@ -10,6 +10,7 @@ dotenv.config();
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chat.routes');
 const contactRoutes = require('./routes/contact.routes');
+const newsletterRoutes = require('./routes/newsletter.routes');
 
 // Initialize express app
 const app = express();
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 
 // Log registered routes
 console.log('📋 Registered routes:');
@@ -44,6 +46,7 @@ console.log('   GET  /api/contact/my-contacts');
 console.log('   GET  /api/contact (admin)');
 console.log('   GET  /api/contact/:id (admin)');
 console.log('   PATCH /api/contact/:id/status (admin)');
+console.log('   POST /api/newsletter/subscribe');
 console.log('   GET  /api/health');
 
 // Health check route
@@ -77,6 +80,7 @@ app.use((req, res) => {
       'GET  /api/contact (admin)',
       'GET  /api/contact/:id (admin)',
       'PATCH /api/contact/:id/status (admin)',
+      'POST /api/newsletter/subscribe',
       'GET /api/chat/test',
       'GET /api/health'
     ]

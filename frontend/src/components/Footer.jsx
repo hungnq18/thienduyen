@@ -1,9 +1,90 @@
+import { useState } from "react";
 import face from "../assets/face.svg";
 import logo from "../assets/logo.svg";
+import useToast from "../hooks/useToast";
+import { subscribeNewsletter } from "../services/newsletterService";
+import Toast from "./Toast";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
+
+  const validateEmail = (emailValue) => {
+    if (!emailValue || !emailValue.trim()) {
+      setEmailError("Email là bắt buộc");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailValue.trim())) {
+      setEmailError("Email không hợp lệ");
+      return false;
+    }
+
+    setEmailError("");
+    return true;
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (emailError) {
+      validateEmail(value);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateEmail(email)) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setEmailError("");
+
+    try {
+      const response = await subscribeNewsletter(email.trim());
+      
+      if (response.status === "success") {
+        showToast(
+          response.message || "Đăng ký thành công! Vui lòng kiểm tra email.",
+          "success",
+          5000
+        );
+        setEmail("");
+      } else {
+        showToast(
+          response.message || "Có lỗi xảy ra. Vui lòng thử lại.",
+          "error"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.message ||
+        (error.status === "error" ? error.message : "Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
+      showToast(errorMessage, "error");
+      
+      if (error.message?.includes("đã được đăng ký")) {
+        setEmailError("Email này đã được đăng ký");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
-    <footer className="w-full bg-[#610912] text-white py-10 px-6 md:px-16">
+    <>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+          duration={toast.duration}
+        />
+      )}
+      <footer className="w-full bg-[#610912] text-white py-10 px-6 md:px-16">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6">
 
         {/* Logo Section */}
@@ -20,9 +101,9 @@ const Footer = () => {
             Chính sách
           </h4>
           <ul className="space-y-2 text-lg" style={{ fontFamily: "Arimo, sans-serif", fontWeight: 400 }}>
-            <li className="hover:text-[#E8C585] cursor-pointer">Điều khoản sử dụng</li>
-            <li className="hover:text-[#E8C585] cursor-pointer">Chính sách bảo mật</li>
-            <li className="hover:text-[#E8C585] cursor-pointer">Tính trợ năng</li>
+            <li className="cursor-pointer">Điều khoản sử dụng</li>
+            <li className="cursor-pointer">Chính sách bảo mật</li>
+            <li className="cursor-pointer">Tính trợ năng</li>
           </ul>
         </div>
 
@@ -43,20 +124,33 @@ const Footer = () => {
           <h4 className="text-2xl font-bold mb-4" style={{ fontFamily: "Arimo, sans-serif" }}>
             Nhận tin mới
           </h4>
-          <div className="flex w-full max-w-[420px] border border-white rounded-xl overflow-hidden mb-4">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 bg-transparent text-white placeholder-white px-4 py-3 outline-none text-base"
-              style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 400 }}
-            />
-            <button
-              className="bg-white text-[#610912] px-5 font-bold transition-colors hover:bg-[#E8C585] hover:text-[#610912]"
-              style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700 }}
-            >
-              Đăng ký
-            </button>
-          </div>
+          <form onSubmit={handleSubmit} className="w-full max-w-[420px] mb-4">
+            <div className="flex w-full border border-white rounded-xl overflow-hidden">
+              <input
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={() => validateEmail(email)}
+                placeholder="Enter your email"
+                className={`flex-1 bg-transparent text-white placeholder-white px-4 py-3 outline-none text-base ${
+                  emailError ? "border-red-500" : ""
+                }`}
+                style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 400 }}
+                disabled={isSubmitting}
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting || !email.trim()}
+                className="bg-white text-[#610912] px-5 font-bold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 700 }}
+              >
+                {isSubmitting ? "..." : "Đăng ký"}
+              </button>
+            </div>
+            {emailError && (
+              <p className="text-red-300 text-sm mt-1 ml-1">{emailError}</p>
+            )}
+          </form>
 
           {/* Social Icons */}
           <div className="flex gap-4 justify-center md:justify-start">
@@ -90,6 +184,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 
