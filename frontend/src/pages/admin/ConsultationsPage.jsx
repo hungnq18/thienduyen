@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import adminService from '../../services/adminService';
 
-const statusOptions = [
-  { value: 'new', label: 'Mới' },
-  { value: 'in-progress', label: 'Đang xử lý' },
-  { value: 'completed', label: 'Hoàn tất' },
+const contactStatusOptions = [
+  { value: 'pending', label: 'Chờ xử lý' },
+  { value: 'read', label: 'Đã đọc' },
+  { value: 'replied', label: 'Đã phản hồi' },
   { value: 'archived', label: 'Lưu trữ' },
 ];
 
@@ -13,6 +14,11 @@ const statusColors = {
   'in-progress': 'bg-amber-100 text-amber-700',
   completed: 'bg-emerald-100 text-emerald-700',
   archived: 'bg-gray-100 text-gray-500',
+  subscribed: 'bg-emerald-100 text-emerald-700',
+  unsubscribed: 'bg-gray-200 text-gray-500',
+  pending: 'bg-amber-50 text-amber-700',
+  read: 'bg-sky-50 text-sky-700',
+  replied: 'bg-emerald-50 text-emerald-700',
 };
 
 const ConsultationsPage = () => {
@@ -37,8 +43,9 @@ const ConsultationsPage = () => {
     fetchData();
   }, []);
 
-  const updateStatus = async (id, status) => {
-    await adminService.updateConsultation(id, { status });
+  const updateStatus = async (item, status) => {
+    if (item.origin !== 'contact') return;
+    await adminService.updateConsultation(item.id, { status });
     fetchData(pagination.page);
   };
 
@@ -59,6 +66,7 @@ const ConsultationsPage = () => {
                 <th className="px-5 py-3 font-medium">Điện thoại</th>
                 <th className="px-5 py-3 font-medium">Trạng thái</th>
                 <th className="px-5 py-3 font-medium">Thời gian</th>
+                <th className="px-5 py-3 font-medium text-right">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -75,21 +83,37 @@ const ConsultationsPage = () => {
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[item.status] || 'bg-gray-100 text-gray-500'}`}>
                         {item.status}
                       </span>
-                      <select
-                        value={item.status}
-                        onChange={(e) => updateStatus(item._id || item.id, e.target.value)}
-                        className="text-xs border border-gray-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring focus:border-[#6B1F2F]"
-                      >
-                        {statusOptions.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
+                      {item.origin === 'contact' ? (
+                        <select
+                          value={item.status}
+                          onChange={(e) => updateStatus(item, e.target.value)}
+                          className="text-xs border border-gray-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring focus:border-[#6B1F2F]"
+                        >
+                          {contactStatusOptions.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className="text-xs text-gray-400">Không chỉnh sửa</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-5 py-3 text-gray-600">
                     {new Date(item.createdAt).toLocaleString('vi-VN')}
+                  </td>
+                  <td className="px-5 py-3 text-right">
+                    {item.origin === 'contact' ? (
+                      <Link
+                        to={`/admin/consultations/contact/${item.id}`}
+                        className="text-xs font-semibold text-[#6B1F2F] hover:underline"
+                      >
+                        Chi tiết
+                      </Link>
+                    ) : (
+                      <span className="text-xs text-gray-400">-</span>
+                    )}
                   </td>
                 </tr>
               ))}

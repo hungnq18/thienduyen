@@ -55,6 +55,45 @@ const contactSchema = new mongoose.Schema(
       trim: true,
       maxlength: [1000, 'Ghi chú không được vượt quá 1000 ký tự'],
     },
+    lastReplyMessage: {
+      type: String,
+      trim: true,
+      maxlength: [4000, 'Nội dung phản hồi không được vượt quá 4000 ký tự'],
+    },
+    lastRepliedAt: {
+      type: Date,
+      default: null,
+    },
+    replyHistory: {
+      type: [
+        {
+          message: {
+            type: String,
+            trim: true,
+            maxlength: [4000, 'Nội dung phản hồi không được vượt quá 4000 ký tự'],
+          },
+          subject: {
+            type: String,
+            trim: true,
+            maxlength: [200, 'Tiêu đề phản hồi không được vượt quá 200 ký tự'],
+          },
+          sentAt: {
+            type: Date,
+            default: Date.now,
+          },
+          adminId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            default: null,
+          },
+          adminEmail: {
+            type: String,
+            trim: true,
+          },
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt

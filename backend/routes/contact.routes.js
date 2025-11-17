@@ -5,6 +5,7 @@ const {
   getContacts,
   getContactById,
   updateContactStatus,
+  respondToContact,
   getMyContacts,
 } = require('../controllers/contact.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
@@ -48,6 +49,7 @@ router.get('/my-contacts', protect, getMyContacts);
 router.get('/', protect, authorize('admin'), getContacts);
 router.get('/:id', protect, authorize('admin'), getContactById);
 router.patch('/:id/status', protect, authorize('admin'), updateContactStatus);
+router.post('/:id/reply', protect, authorize('admin'), respondToContact);
 
 module.exports = router;
 

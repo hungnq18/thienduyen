@@ -96,6 +96,7 @@ console.log('   GET  /api/contact/my-contacts');
 console.log('   GET  /api/contact (admin)');
 console.log('   GET  /api/contact/:id (admin)');
 console.log('   PATCH /api/contact/:id/status (admin)');
+console.log('   POST /api/contact/:id/reply (admin)');
 console.log('   POST /api/newsletter/subscribe');
 console.log('   POST /api/consultations');
 console.log('   GET  /api/consultations (admin)');

@@ -13,12 +13,12 @@ const getEnvVar = (keys, defaultValue) => {
 };
 
 const resolveEmailConfig = () => {
-  const smtpHost = getEnvVar(['SMTP_HOST', 'EMAIL_HOST']);
-  const smtpPort = getEnvVar(['SMTP_PORT', 'EMAIL_PORT']);
-  const smtpSecure = getEnvVar(['SMTP_SECURE', 'EMAIL_SECURE']);
+  const smtpHost = getEnvVar(['SMTP_HOST', 'EMAIL_HOST'], 'smtp.gmail.com');
+  const smtpPort = getEnvVar(['SMTP_PORT', 'EMAIL_PORT'], '587');
+  const smtpSecure = getEnvVar(['SMTP_SECURE', 'EMAIL_SECURE'], 'false');
   const smtpUser = getEnvVar(['EMAIL_USER', 'SMTP_USER']);
-  const smtpPass = getEnvVar(['EMAIL_PASSWORD', 'SMTP_PASSWORD']);
-  const emailService = getEnvVar(['EMAIL_SERVICE']);
+  const smtpPass = getEnvVar(['EMAIL_APP_PASSWORD', 'SMTP_APP_PASSWORD', 'EMAIL_PASSWORD', 'SMTP_PASSWORD']);
+  const emailService = getEnvVar(['EMAIL_SERVICE'], 'gmail');
   const adminEmail = getEnvVar(['ADMIN_EMAIL', 'EMAIL_ADMIN', 'SMTP_ADMIN_EMAIL']);
   const fromName = getEnvVar(['EMAIL_FROM_NAME', 'SMTP_FROM_NAME', 'MAIL_FROM_NAME'], 'ThienDuyen');
 
@@ -34,52 +34,32 @@ const resolveEmailConfig = () => {
   };
 };
 
+const sanitize = (str) => {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
 // Create transporter - configure with your email service
 // Supports both service-based (Gmail, Outlook) and custom SMTP
 const createTransporter = () => {
-  const { smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass, emailService } = resolveEmailConfig();
+  const { smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass } = resolveEmailConfig();
 
-  if (smtpHost.value && smtpPort.value) {
-    const brevoDetected = Boolean(
-      (smtpHost.value && smtpHost.value.includes('brevo.com')) ||
-      (smtpHost.value && smtpHost.value.includes('smtp-relay.sendinblue.com')) ||
-      (smtpPass.value && smtpPass.value.startsWith('xsmtpsib-'))
-    );
-
-    console.log('📧 SMTP Configuration:');
-    console.log(`   Host (${smtpHost.key}): ${smtpHost.value}`);
-    console.log(`   Port (${smtpPort.key}): ${smtpPort.value}`);
-    console.log(`   Secure (${smtpSecure.key}): ${smtpSecure.value}`);
-    console.log(`   User (${smtpUser.key}): ${smtpUser.value}`);
-    console.log(`   Password (${smtpPass.key}): ${smtpPass.value ? '***' + smtpPass.value.slice(-4) : 'NOT SET'}`);
-    console.log(`   BrevoDetected: ${brevoDetected}`);
-
-    return nodemailer.createTransport({
-      host: smtpHost.value,
-      port: parseInt(smtpPort.value, 10) || 587,
-      secure: String(smtpSecure.value).toLowerCase() === 'true',
-      auth: {
-        user: smtpUser.value,
-        pass: smtpPass.value,
-      },
-      tls: {
-        rejectUnauthorized: process.env.NODE_ENV === 'production',
-      },
-      connectionTimeout: 20000, // 20 seconds
-      greetingTimeout: 20000, // 20 seconds
-      socketTimeout: 20000, // 20 seconds
-      debug: process.env.NODE_ENV === 'development',
-      logger: process.env.NODE_ENV === 'development',
-    });
-  }
-
-  console.log('📧 Email Service Configuration:');
-  console.log(`   Service (${emailService.key}): ${emailService.value || 'gmail'}`);
+  console.log('📧 Gmail SMTP configuration:');
+  console.log(`   Host (${smtpHost.key}): ${smtpHost.value}`);
+  console.log(`   Port (${smtpPort.key}): ${smtpPort.value}`);
+  console.log(`   Secure (${smtpSecure.key}): ${smtpSecure.value}`);
   console.log(`   User (${smtpUser.key}): ${smtpUser.value}`);
-  console.log(`   Password (${smtpPass.key}): ${smtpPass.value ? '***' + smtpPass.value.slice(-4) : 'NOT SET'}`);
+  console.log(`   App Password (${smtpPass.key}): ${smtpPass.value ? '***' + smtpPass.value.slice(-4) : 'NOT SET'}`);
 
   return nodemailer.createTransport({
-    service: emailService.value || 'gmail',
+    host: smtpHost.value || 'smtp.gmail.com',
+    port: parseInt(smtpPort.value, 10) || 587,
+    secure: String(smtpSecure.value).toLowerCase() === 'true',
     auth: {
       user: smtpUser.value,
       pass: smtpPass.value,
@@ -87,9 +67,9 @@ const createTransporter = () => {
     tls: {
       rejectUnauthorized: process.env.NODE_ENV === 'production',
     },
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 10000, // 10 seconds
-    socketTimeout: 10000, // 10 seconds
+    connectionTimeout: 20000, // 20 seconds
+    greetingTimeout: 20000, // 20 seconds
+    socketTimeout: 20000, // 20 seconds
     debug: process.env.NODE_ENV === 'development',
     logger: process.env.NODE_ENV === 'development',
   });
@@ -174,16 +154,6 @@ const sendContactEmail = async (req, res) => {
     }
 
     const transporter = createTransporter();
-
-    const sanitize = (str) => {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    };
 
     const sanitizedName = sanitize(finalName);
     const sanitizedEmail = sanitize(finalEmail);
@@ -523,6 +493,99 @@ const updateContactStatus = async (req, res) => {
   }
 };
 
+// Respond to a contact via email (Admin)
+const respondToContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { message, subject, adminNotes } = req.body;
+
+    if (!message || message.trim().length < 5) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Nội dung phản hồi phải có ít nhất 5 ký tự.',
+      });
+    }
+
+    const contact = await Contact.findById(id);
+
+    if (!contact) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Không tìm thấy liên hệ.',
+      });
+    }
+
+    const emailConfig = resolveEmailConfig();
+
+    if (!emailConfig.smtpUser.value || !emailConfig.smtpPass.value) {
+      console.error('Email service not configured. Please set the SMTP credentials in .env');
+      return res.status(500).json({
+        status: 'error',
+        message: 'Email service chưa được cấu hình. Vui lòng liên hệ quản trị viên.',
+      });
+    }
+
+    const transporter = createTransporter();
+    const fromName = emailConfig.fromName.value || 'ThienDuyen';
+    const fromEmail = emailConfig.smtpUser.value;
+    const finalSubject = (subject && subject.trim()) || `Phản hồi liên hệ từ ${fromName}`;
+    const adminName = req.user?.fullName || req.user?.email || 'Admin Thiện Duyên';
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <p>Xin chào ${sanitize(contact.name) || 'bạn'},</p>
+        <p>${sanitize(adminName)} vừa gửi phản hồi cho yêu cầu của bạn:</p>
+        <div style="background-color: #f8fbf2; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <p style="white-space: pre-wrap;">${sanitize(message).replace(/\n/g, '<br>')}</p>
+        </div>
+        <p>Nếu bạn có thêm câu hỏi, vui lòng phản hồi lại email này.</p>
+        <p>Trân trọng,<br/>Đội ngũ Thiện Duyên</p>
+      </div>
+    `;
+
+    await retryWithBackoff(async () => {
+      await transporter.sendMail({
+        from: `"${fromName}" <${fromEmail}>`,
+        to: contact.email,
+        replyTo: emailConfig.adminEmail.value || fromEmail,
+        subject: finalSubject,
+        html,
+      });
+    }, 3, 1000);
+
+    const sentAt = new Date();
+
+    contact.status = 'replied';
+    contact.lastReplyMessage = message;
+    contact.lastRepliedAt = sentAt;
+    if (adminNotes !== undefined) {
+      contact.adminNotes = adminNotes;
+    }
+    contact.replyHistory.push({
+      message,
+      subject: finalSubject,
+      sentAt,
+      adminId: req.user?._id || null,
+      adminEmail: req.user?.email || null,
+    });
+
+    await contact.save();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Đã gửi phản hồi thành công.',
+      data: contact,
+    });
+  } catch (error) {
+    console.error('Error responding to contact:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Có lỗi xảy ra khi gửi phản hồi.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
 // Get user's own contact submissions
 const getMyContacts = async (req, res) => {
   try {
@@ -568,6 +631,7 @@ module.exports = {
   getContacts,
   getContactById,
   updateContactStatus,
+  respondToContact,
   getMyContacts,
 };
 

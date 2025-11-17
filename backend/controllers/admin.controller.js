@@ -25,8 +25,7 @@ exports.getDashboardStats = async (req, res) => {
       newUsersToday,
       totalContacts,
       pendingContacts,
-      totalConsultations,
-      pendingConsultations,
+      totalNewsletterEntries,
       newsletterSubscribers,
       dailyConsultations,
       dailyVisitors,
@@ -37,8 +36,7 @@ exports.getDashboardStats = async (req, res) => {
       User.countDocuments({ createdAt: { $gte: now.startOf('day').toDate() } }),
       Contact.countDocuments(),
       Contact.countDocuments({ status: 'pending' }),
-      ConsultationRequest.countDocuments(),
-      ConsultationRequest.countDocuments({ status: 'new' }),
+      Newsletter.countDocuments(),
       Newsletter.countDocuments({ subscribed: true }),
       ConsultationRequest.aggregate([
         { $match: { createdAt: { $gte: sevenDaysAgo } } },
@@ -67,6 +65,9 @@ exports.getDashboardStats = async (req, res) => {
       ConsultationRequest.find().sort({ createdAt: -1 }).limit(5),
       Contact.find().sort({ createdAt: -1 }).limit(5).select('name email status createdAt'),
     ]);
+
+    const totalConsultations = totalContacts + totalNewsletterEntries;
+    const pendingConsultations = pendingContacts;
 
     const fillMissingDays = (data) => {
       const result = [];

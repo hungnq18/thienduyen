@@ -63,6 +63,21 @@ class AdminService {
     const response = await api.get('/admin/users', { params });
     return response.data.data;
   }
+
+  async getContactById(id) {
+    const response = await api.get(`/contact/${id}`);
+    return response.data.data;
+  }
+
+  async updateContactStatus(id, payload) {
+    const response = await api.patch(`/contact/${id}/status`, payload);
+    return response.data.data;
+  }
+
+  async replyToContact(id, payload) {
+    const response = await api.post(`/contact/${id}/reply`, payload);
+    return response.data.data;
+  }
 }
 
 export default new AdminService();

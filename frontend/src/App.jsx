@@ -15,6 +15,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import BlogsPage from './pages/admin/BlogsPage';
 import ConsultationsPage from './pages/admin/ConsultationsPage';
+import ContactDetailPage from './pages/admin/ContactDetailPage';
 import ServicesPage from './pages/admin/ServicesPage';
 import TrafficPage from './pages/admin/TrafficPage';
 import UsersPage from './pages/admin/UsersPage';
@@ -132,6 +133,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="consultations" element={<ConsultationsPage />} />
+          <Route path="consultations/contact/:id" element={<ContactDetailPage />} />
           <Route path="services" element={<ServicesPage />} />
           <Route path="blogs" element={<BlogsPage />} />
           <Route path="traffic" element={<TrafficPage />} />

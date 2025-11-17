@@ -13,12 +13,12 @@ const getEnvVar = (keys, defaultValue) => {
 };
 
 const resolveEmailConfig = () => {
-  const smtpHost = getEnvVar(['SMTP_HOST', 'EMAIL_HOST']);
-  const smtpPort = getEnvVar(['SMTP_PORT', 'EMAIL_PORT']);
-  const smtpSecure = getEnvVar(['SMTP_SECURE', 'EMAIL_SECURE']);
+  const smtpHost = getEnvVar(['SMTP_HOST', 'EMAIL_HOST'], 'smtp.gmail.com');
+  const smtpPort = getEnvVar(['SMTP_PORT', 'EMAIL_PORT'], '587');
+  const smtpSecure = getEnvVar(['SMTP_SECURE', 'EMAIL_SECURE'], 'false');
   const smtpUser = getEnvVar(['EMAIL_USER', 'SMTP_USER']);
-  const smtpPass = getEnvVar(['EMAIL_PASSWORD', 'SMTP_PASSWORD']);
-  const emailService = getEnvVar(['EMAIL_SERVICE']);
+  const smtpPass = getEnvVar(['EMAIL_APP_PASSWORD', 'SMTP_APP_PASSWORD', 'EMAIL_PASSWORD', 'SMTP_PASSWORD']);
+  const emailService = getEnvVar(['EMAIL_SERVICE'], 'gmail');
   const fromName = getEnvVar(['EMAIL_FROM_NAME', 'SMTP_FROM_NAME', 'MAIL_FROM_NAME'], 'ThienDuyen');
 
   return {
@@ -34,30 +34,19 @@ const resolveEmailConfig = () => {
 
 // Create transporter
 const createTransporter = () => {
-  const { smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass, emailService } = resolveEmailConfig();
+  const { smtpHost, smtpPort, smtpSecure, smtpUser, smtpPass } = resolveEmailConfig();
 
-  if (smtpHost.value && smtpPort.value) {
-    return nodemailer.createTransport({
-      host: smtpHost.value,
-      port: parseInt(smtpPort.value, 10) || 587,
-      secure: String(smtpSecure.value).toLowerCase() === 'true',
-      auth: {
-        user: smtpUser.value,
-        pass: smtpPass.value,
-      },
-      tls: {
-        rejectUnauthorized: process.env.NODE_ENV === 'production',
-      },
-      connectionTimeout: 20000,
-      greetingTimeout: 20000,
-      socketTimeout: 20000,
-      debug: process.env.NODE_ENV === 'development',
-      logger: process.env.NODE_ENV === 'development',
-    });
-  }
+  console.log('📧 Gmail SMTP configuration (newsletter):');
+  console.log(`   Host (${smtpHost.key}): ${smtpHost.value}`);
+  console.log(`   Port (${smtpPort.key}): ${smtpPort.value}`);
+  console.log(`   Secure (${smtpSecure.key}): ${smtpSecure.value}`);
+  console.log(`   User (${smtpUser.key}): ${smtpUser.value}`);
+  console.log(`   App Password (${smtpPass.key}): ${smtpPass.value ? '***' + smtpPass.value.slice(-4) : 'NOT SET'}`);
 
   return nodemailer.createTransport({
-    service: emailService.value || 'gmail',
+    host: smtpHost.value || 'smtp.gmail.com',
+    port: parseInt(smtpPort.value, 10) || 587,
+    secure: String(smtpSecure.value).toLowerCase() === 'true',
     auth: {
       user: smtpUser.value,
       pass: smtpPass.value,
@@ -65,9 +54,9 @@ const createTransporter = () => {
     tls: {
       rejectUnauthorized: process.env.NODE_ENV === 'production',
     },
-    connectionTimeout: 20000, // 20 seconds
-    greetingTimeout: 20000, // 20 seconds
-    socketTimeout: 20000, // 20 seconds
+    connectionTimeout: 20000,
+    greetingTimeout: 20000,
+    socketTimeout: 20000,
     debug: process.env.NODE_ENV === 'development',
     logger: process.env.NODE_ENV === 'development',
   });
