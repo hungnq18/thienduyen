@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import './App.css';
+import AdminRoute from './components/AdminRoute';
 import AuthModal from './components/AuthModal';
 import CoordinatorQuotation from './components/CoordinatorQuotation';
 import DecorQuotation from './components/DecorQuotation';
 import PlanningQuotation from './components/PlanningQuotation';
 import { useAuth } from './context/AuthContext';
+import useAnalyticsTracker from './hooks/useAnalyticsTracker';
+import AdminLayout from './layouts/AdminLayout';
 import MainLayout from './layouts/mainLayout';
 import AboutPage from './pages/AboutPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLogin from './pages/admin/AdminLogin';
+import BlogsPage from './pages/admin/BlogsPage';
+import ConsultationsPage from './pages/admin/ConsultationsPage';
+import ServicesPage from './pages/admin/ServicesPage';
+import TrafficPage from './pages/admin/TrafficPage';
+import UsersPage from './pages/admin/UsersPage';
 import AuthCallback from './pages/AuthCallback';
 import BlogPage from './pages/BlogPage';
 import BlogPost1 from './pages/BlogPost1';
@@ -19,13 +29,14 @@ import DecorQuotationPage from './pages/DecorQuotationPage';
 import DecorQuotationResortPage from './pages/DecorQuotationResort';
 import HomePage from './pages/HomePage';
 import QuotationPage from './pages/QuotationPage';
-import ServicesPage from './pages/ServicesPage';
+import ServicesUserPage from './pages/ServicesUserPage';
 
 function AppContent() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalMode, setAuthModalMode] = useState('login');
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
+  useAnalyticsTracker();
 
   // Listen for custom events to open modal
   useEffect(() => {
@@ -79,7 +90,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/services" element={<ServicesUserPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/quotation" element={<QuotationPage />} />
@@ -108,9 +119,33 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <MainLayout>
-        <AppContent />
-      </MainLayout>
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/*"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="consultations" element={<ConsultationsPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route path="blogs" element={<BlogsPage />} />
+          <Route path="traffic" element={<TrafficPage />} />
+          <Route path="users" element={<UsersPage />} />
+        </Route>
+        <Route
+          path="/*"
+          element={
+            <MainLayout>
+              <AppContent />
+            </MainLayout>
+          }
+        />
+      </Routes>
     </Router>
   );
 }

@@ -2,7 +2,7 @@ import CoordinationSeviceSection from '../components/CoordinationSeviceSection';
 import DecorationServiceSection from '../components/DecorationServiceSection';
 import PlanningServiceSection from '../components/PlanningServiceSection';
 import ServiceSection from '../components/ServiceSection';
-const ServicesPage = () => {
+const ServicesUserPage = () => {
   return (
     <div className="root">
       <ServiceSection />
@@ -30,4 +30,4 @@ const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default ServicesUserPage;

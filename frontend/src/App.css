@@ -199,6 +199,15 @@
   align-items: center;
 }
 
+.header-auth-btn {
+  color: #fff;
+  transition: color 0.2s ease;
+}
+
+.header-auth-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .logo h1 {
   margin: 0;
   font-size: 1.5rem;

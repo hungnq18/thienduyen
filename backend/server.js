@@ -14,17 +14,54 @@ const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chat.routes');
 const contactRoutes = require('./routes/contact.routes');
 const newsletterRoutes = require('./routes/newsletter.routes');
+const consultationRoutes = require('./routes/consultation.routes');
+const analyticsRoutes = require('./routes/analytics.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 // Initialize express app
 const app = express();
 
 // Middleware
-// CORS configuration - allow requests from frontend
+// CORS configuration - allow requests from multiple frontends/environments
+const defaultAllowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://www.thienduyen.online/',
+  'https://thienduyen.vercel.app/'
+];
+
+const envOrigins =
+  process.env.CORS_ORIGINS ||
+  process.env.CORS_ORIGIN ||
+  process.env.FRONTEND_URL ||
+  '';
+
+const allowedOrigins = [
+  ...new Set([
+    ...defaultAllowedOrigins,
+    ...envOrigins
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter((origin) => origin.length > 0),
+  ]),
+];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || process.env.CORS_ORIGIN || '*',
+  origin: (origin, callback) => {
+    // Allow non-browser requests or same-origin (like curl/Postman) where origin is undefined
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    console.warn(`❌ CORS blocked request from origin: ${origin}`);
+    return callback(
+      new Error(`Origin ${origin} not allowed by CORS. Allowed origins: ${allowedOrigins.join(', ')}`)
+    );
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -40,6 +77,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/consultations', consultationRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Log registered routes
 console.log('📋 Registered routes:');
@@ -57,6 +97,10 @@ console.log('   GET  /api/contact (admin)');
 console.log('   GET  /api/contact/:id (admin)');
 console.log('   PATCH /api/contact/:id/status (admin)');
 console.log('   POST /api/newsletter/subscribe');
+console.log('   POST /api/consultations');
+console.log('   GET  /api/consultations (admin)');
+console.log('   POST /api/analytics/track');
+console.log('   GET  /api/admin/stats');
 console.log('   GET  /api/health');
 
 // Health check route
@@ -97,7 +141,17 @@ app.use((req, res) => {
       'GET  /api/contact (admin)',
       'GET  /api/contact/:id (admin)',
       'PATCH /api/contact/:id/status (admin)',
+      'POST /api/consultations',
+      'GET  /api/consultations (admin)',
+      'PATCH /api/consultations/:id (admin)',
       'POST /api/newsletter/subscribe',
+      'POST /api/analytics/track',
+      'GET  /api/admin/stats',
+      'GET  /api/admin/traffic',
+      'GET  /api/admin/services',
+      'POST /api/admin/services',
+      'GET  /api/admin/blogs',
+      'POST /api/admin/blogs',
       'GET /api/chat/test',
       'GET /api/health'
     ]

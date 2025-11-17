@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Toast from '../components/Toast';
 import { useAuth } from '../context/AuthContext';
 import useToast from '../hooks/useToast';
+import { createConsultation } from '../services/consultationService';
 import { sendContactForm } from '../services/contactService';
 
 function ContactPage() {
@@ -197,6 +198,19 @@ function ContactPage() {
       const response = await sendContactForm(formData);
       
       if (response.status === 'success') {
+        // Log consultation request for admin dashboard
+        try {
+          await createConsultation({
+            name: formData.name || userFullName || 'Ẩn danh',
+            email: formData.email || userEmail,
+            phone: formData.phone,
+            message: formData.message,
+            source: 'get-in-touch',
+          });
+        } catch (trackError) {
+          console.warn('Failed to log consultation request:', trackError?.message);
+        }
+
         setSubmitSuccess(true);
         showToast(
           response.message || 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.',

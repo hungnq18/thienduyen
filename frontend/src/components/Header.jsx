@@ -193,13 +193,13 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-6 ml-auto">
           {isAuthenticated ? (
             <>
-              <div className="flex items-center gap-2 text-[#F8FBF2]">
+              <div className="flex items-center gap-2 text-white">
                 <User size={20} />
                 <span className="font-semibold">{user?.fullName || user?.email}</span>
               </div>
               <button
                 onClick={logout}
-                className="flex items-center gap-2 text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold"
+                className="header-auth-btn flex items-center gap-2 text-white hover:text-white/80 transition-colors font-semibold"
               >
                 <LogOut size={20} />
                 Đăng Xuất
@@ -212,7 +212,7 @@ const Header = () => {
                   // Trigger modal via custom event or state management
                   window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'register' } }));
                 }}
-                className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold"
+                className="header-auth-btn text-white hover:text-white/80 transition-colors font-semibold"
               >
                 Đăng Ký
               </button>
@@ -220,7 +220,7 @@ const Header = () => {
                 onClick={() => {
                   window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'login' } }));
                 }}
-                className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold"
+                className="header-auth-btn text-white hover:text-white/80 transition-colors font-semibold"
               >
                 Đăng Nhập
               </button>
@@ -316,7 +316,7 @@ const Header = () => {
           <div className="flex flex-col items-center gap-4 mt-4">
             {isAuthenticated ? (
               <>
-                <div className="flex items-center gap-2 text-[#F8FBF2]">
+                <div className="flex items-center gap-2 text-white">
                   <User size={20} />
                   <span>{user?.fullName || user?.email}</span>
                 </div>
@@ -325,7 +325,7 @@ const Header = () => {
                     logout();
                     setMenuOpen(false);
                   }}
-                  className="flex items-center gap-2 text-[#F8FBF2] hover:text-[#E8C585]"
+                  className="header-auth-btn flex items-center gap-2 text-white hover:text-white/80"
                 >
                   <LogOut size={20} />
                   Đăng Xuất
@@ -338,7 +338,7 @@ const Header = () => {
                     setMenuOpen(false);
                     window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'register' } }));
                   }}
-                  className="text-[#F8FBF2] hover:text-[#E8C585]"
+                  className="header-auth-btn text-white hover:text-white/80"
                 >
                   Đăng Ký
                 </button>
@@ -347,7 +347,7 @@ const Header = () => {
                     setMenuOpen(false);
                     window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'login' } }));
                   }}
-                  className="text-[#F8FBF2] hover:text-[#E8C585]"
+                  className="header-auth-btn text-white hover:text-white/80"
                 >
                   Đăng Nhập
                 </button>
