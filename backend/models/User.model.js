@@ -23,9 +23,26 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: function() {
+        // Password is required only if user is not using OAuth
+        return !this.googleId && !this.facebookId;
+      },
       minlength: [6, 'Password must be at least 6 characters'],
       select: false // Don't return password by default
+    },
+    googleId: {
+      type: String,
+      sparse: true,
+      unique: true
+    },
+    facebookId: {
+      type: String,
+      sparse: true,
+      unique: true
+    },
+    avatar: {
+      type: String,
+      default: null
     },
     role: {
       type: String,
@@ -55,8 +72,8 @@ const userSchema = new mongoose.Schema(
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-  // Only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) {
+  // Only hash the password if it has been modified (or is new) and exists
+  if (!this.isModified('password') || !this.password) {
     return next();
   }
 

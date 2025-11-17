@@ -1,72 +1,201 @@
+import { Eye, EyeOff, Lock, Mail, User, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import useToast from "../hooks/useToast";
+import authService from "../services/authService";
+import Toast from "./Toast";
 
-import { Eye, EyeOff, Lock, Mail } from "lucide-react"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import Toast from "../components/Toast"
-import { useAuth } from "../context/AuthContext"
-import useToast from "../hooks/useToast"
-import authService from "../services/authService"
+const AuthModal = ({ isOpen, onClose, initialMode = "login" }) => {
+  const navigate = useNavigate();
+  const [mode, setMode] = useState(initialMode); // 'login' or 'register'
 
-export default function LoginPage() {
-  const navigate = useNavigate()
-  const { login } = useAuth()
-  const { toast, showToast, hideToast } = useToast()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  // Update mode when initialMode changes
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode);
+    }
+  }, [initialMode, isOpen]);
+  const { login, isAuthenticated } = useAuth();
+  const { toast, showToast, hideToast } = useToast();
 
+  // Login state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
+
+  // Register state
+  const [fullName, setFullName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [registerError, setRegisterError] = useState("");
+
+  // Reset form when mode changes
+  useEffect(() => {
+    if (isOpen) {
+      setLoginError("");
+      setRegisterError("");
+      setEmail("");
+      setPassword("");
+      setFullName("");
+      setConfirmPassword("");
+    }
+  }, [mode, isOpen]);
+
+  // Close modal if user is authenticated
+  useEffect(() => {
+    if (isAuthenticated && isOpen) {
+      onClose();
+    }
+  }, [isAuthenticated, isOpen, onClose]);
+
+  // Handle login
   const handleLogin = async (e) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+    e.preventDefault();
+    setLoginError("");
+    setLoginLoading(true);
 
     try {
-      const response = await authService.login({ email, password })
-      
+      const response = await authService.login({ email, password });
+
       if (response.status === "success") {
         // Update auth context
-        login(response.data.user)
+        login(response.data.user);
         
         // Show success toast
-        showToast(`Chào mừng ${response.data.user.fullName}! Đăng nhập thành công.`, "success")
+        showToast(`Chào mừng ${response.data.user.fullName}! Đăng nhập thành công.`, "success");
         
         // Check if there's a redirect path from sessionStorage
-        const redirectPath = sessionStorage.getItem('redirectAfterLogin')
+        const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+        
+        // Close modal
+        onClose();
         
         // Redirect after a short delay
         setTimeout(() => {
           if (redirectPath) {
-            sessionStorage.removeItem('redirectAfterLogin')
-            navigate(redirectPath)
+            sessionStorage.removeItem('redirectAfterLogin');
+            navigate(redirectPath);
           } else {
-            navigate("/")
+            navigate("/");
           }
-        }, 1500)
+        }, 1500);
       }
     } catch (err) {
-      console.error("Login error:", err)
-      setError(err.message || "Đăng nhập thất bại. Vui lòng thử lại.")
+      console.error("Login error:", err);
+      setLoginError(err.message || "Đăng nhập thất bại. Vui lòng thử lại.");
     } finally {
-      setLoading(false)
+      setLoginLoading(false);
     }
-  }
+  };
+
+  // Handle register
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setRegisterError("");
+
+    // Validation
+    if (!email || !fullName || !password || !confirmPassword) {
+      setRegisterError("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setRegisterError("Mật khẩu xác nhận không khớp");
+      return;
+    }
+
+    if (password.length < 6) {
+      setRegisterError("Mật khẩu phải có ít nhất 6 ký tự");
+      return;
+    }
+
+    if (!agreeTerms) {
+      setRegisterError("Vui lòng đồng ý với điều khoản sử dụng");
+      return;
+    }
+
+    setRegisterLoading(true);
+
+    try {
+      const response = await authService.register({
+        email,
+        fullName,
+        password,
+        confirmPassword,
+      });
+
+      if (response.status === "success") {
+        // Update auth context
+        login(response.data.user);
+        
+        // Show success toast
+        showToast(`Chúc mừng ${response.data.user.fullName}! Đăng ký tài khoản thành công.`, "success");
+        
+        // Close modal
+        onClose();
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      setRegisterError(err.message || "Đăng ký thất bại. Vui lòng thử lại.");
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
     <>
-      {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} duration={toast.duration} />}
-      <div className="min-h-screen flex bg-white">
-      {/* Left Side - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-b from-[#610912] to-[#610912] relative overflow-hidden items-center justify-center p-8">
-        {/* Decorative floral background pattern */}
-        <div className="absolute inset-0 opacity-20">
-          <img src="https://res.cloudinary.com/dijayprrw/image/upload/v1760846773/Thi%E1%BA%BFt_k%E1%BA%BF_ch%C6%B0a_c%C3%B3_t%C3%AAn_30_1_wgp8m7.png" alt="Floral Background" className="w-full h-full object-cover" />
-        </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+          duration={toast.duration}
+        />
+      )}
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+        onClick={onClose}
+      >
+        {/* Modal Content */}
+        <div
+          className="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+            aria-label="Close"
+          >
+            <X size={24} />
+          </button>
 
-        {/* Swan Logo and Text */}
-        <div className="relative z-10 text-center">
+          <div className="flex flex-col lg:flex-row">
+            {/* Left Side - Decorative (Desktop only) */}
+            <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-b from-[#610912] to-[#610912] relative overflow-hidden items-center justify-center p-8">
+              <div className="absolute inset-0 opacity-20">
+                <img
+                  src="https://res.cloudinary.com/dijayprrw/image/upload/v1760846773/Thi%E1%BA%BFt_k%E1%BA%BF_ch%C6%B0a_c%C3%B3_t%C3%AAn_30_1_wgp8m7.png"
+                  alt="Floral Background"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="relative z-10 text-center">
+              <div className="relative z-10 text-center">
           <div className="mb-8">
           <svg width="196" height="308" viewBox="0 0 196 308" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M195.429 125.813C195.005 111.018 192.297 96.2724 187.241 82.3586C184.549 99.9099 169.575 114.705 152.089 117.755C135.973 120.593 119.662 114.362 103.285 114.411C87.1365 114.444 71.0532 120.903 59.3578 132.044C55.0516 136.154 51.2183 141.048 49.7666 146.822C48.2822 152.58 49.6035 159.333 54.1381 163.199C58.4607 166.869 64.6917 167.244 70.3681 166.69C76.012 166.135 81.721 164.846 87.3322 165.776C92.9271 166.722 98.5709 170.784 98.9787 176.444C99.3049 181.044 96.1731 185.187 92.6172 188.107C89.0776 191.027 84.9181 193.261 81.8678 196.719C80.465 198.302 79.2906 200.585 80.2693 202.445C80.8565 203.619 82.1288 204.272 83.3685 204.761C91.6385 208.072 101.67 206.881 108.603 201.303C115.535 195.708 118.814 185.774 116.041 177.308C113.724 170.213 107.836 164.912 101.915 160.361C95.9937 155.81 89.6485 151.455 85.6684 145.126C81.6884 138.797 80.8076 129.776 85.8642 124.296C90.3009 119.468 98.2936 118.929 103.954 122.224C104.851 122.746 105.666 123.366 106.466 124.018C106.825 124.1 107.183 124.198 107.542 124.328C111.457 125.65 114.312 129.679 114.279 133.822C114.279 134.295 114.246 134.768 114.197 135.241C113.3 137.215 111.8 138.927 109.875 139.971C108.064 140.966 105.911 141.358 103.84 141.097C103.236 140.754 102.632 140.395 102.062 139.971C100.218 138.568 98.6688 136.676 98.049 134.458C97.5107 132.566 97.7227 130.543 98.4893 128.765C98.5383 128.651 98.5709 128.553 98.6198 128.439C98.6362 128.423 98.6362 128.423 98.6525 128.406C95.1781 125.095 88.7024 127.884 87.2833 132.484C85.8642 137.1 88.1804 142.108 91.3612 145.729C97.527 152.743 106.792 156.332 113.3 163.02C125.469 175.547 124.082 198.514 110.511 209.491C103.986 214.76 95.6185 217.223 87.2996 218.185C68.3618 220.387 48.429 214.972 33.928 202.591C19.4433 190.211 10.896 170.8 12.674 151.83C14.7129 130.347 29.1487 111.703 46.5206 98.8986C56.4543 91.5747 67.4321 85.7514 77.4474 78.5417C87.479 71.3483 96.7603 62.3932 101.409 50.9425C106.743 37.8279 104.949 21.6631 95.6185 10.9954C86.6634 0.751662 70.7433 -3.1305 58.5912 2.77431C58.5749 2.77431 58.5749 2.79061 58.5585 2.79061C55.6225 2.23602 52.5233 2.59488 49.6687 3.55726C41.3661 6.37917 35.2166 14.5513 34.5968 23.278C42.2306 22.1851 49.2283 19.51 55.6714 15.3506C55.6551 11.6315 56.3891 8.01033 58.0692 4.65014C58.3791 4.97637 58.6564 5.28629 58.95 5.61252C56.0466 15.9867 59.6188 26.8666 64.3492 36.6209C67.4157 33.7827 69.8462 30.2594 70.988 26.263C71.9341 22.9028 71.8036 19.3632 70.8901 16.0356C70.8901 16.0193 70.8901 16.0193 70.8901 16.003C71.3631 11.6804 75.9304 7.76565 80.5955 7.76565C80.7749 7.76565 80.9544 7.76566 81.1338 7.78197C87.1365 8.20607 91.9158 13.2137 94.4114 18.6781C100.023 30.9445 96.744 45.8859 89.1754 57.0593C81.5905 68.2328 70.3192 76.3233 58.9174 83.5494C47.5319 90.7917 35.657 97.5447 25.9843 106.989C-3.16458 135.404 -4.339 181.191 18.7582 213.537C25.2339 222.573 33.4876 230.403 43.1767 235.9C44.8731 236.862 46.6021 237.743 48.3801 238.575C49.8644 239.276 51.3651 239.912 52.9147 240.532C61.8861 237.156 70.3681 231.952 79.0948 228.739C90.7903 224.4 103.187 226.504 115.176 228.918C125.664 231.284 135.403 233.42 145.238 234.008C146.739 233.062 148.191 232.067 149.626 231.055C169.853 216.636 184.647 194.224 190.422 169.887C193.863 155.32 195.87 140.836 195.429 125.813ZM108.293 143.038C107.901 142.907 107.526 142.777 107.151 142.614C108.374 142.418 109.565 142.01 110.658 141.423C111.963 140.705 113.105 139.71 114.051 138.552C114.279 141.227 115.845 143.756 118.145 145.142C114.638 144.848 111.62 144.131 108.293 143.038ZM183.946 161.356C179.672 178.222 170.407 193.963 156.885 204.875C143.395 215.755 125.616 221.513 108.439 219.392C110.152 219.392 113.349 217.06 114.654 216.244C116.628 215.037 118.471 213.618 120.167 212.036C123.462 208.937 126.268 205.136 128.095 201.009C131.569 193.114 133.364 184.665 132.075 176.395C131.602 173.361 130.737 170.36 129.351 167.407C127.72 163.884 125.501 160.622 122.777 157.849C119.287 154.325 119.058 150.623 121.081 146.153C121.179 145.974 121.26 145.778 121.342 145.599C131.553 124.492 157.896 137.9 173.343 125.372C175.904 123.301 178.123 120.854 179.901 118.097C181.01 116.417 184.125 111.834 183.62 109.713C187.665 126.628 188.236 144.506 183.946 161.356Z" fill="#F2EDD7"/>
@@ -91,163 +220,323 @@ export default function LoginPage() {
 
           </div>
         </div>
-      </div>
-
-      {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50">
-        <div className="w-full max-w-md">
-          {/* Header */}
-          <div className="mb-8">
-            <p className="text-sm text-gray-600 mb-2">Xin chào bạn</p>
-            <h2 className="text-3xl font-bold text-gray-900">Đăng Nhập Để Tiếp Tục</h2>
-          </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {error}
               </div>
-            )}
-
-            {/* Email Input */}
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <Mail size={20} />
-              </div>
-              <input
-                type="email"
-                placeholder="Số Điện Thoại Hoặc Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
-              />
             </div>
 
-            {/* Password Input */}
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <Lock size={20} />
+            {/* Right Side - Form */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50">
+              <div className="w-full max-w-md">
+                {/* Header */}
+                <div className="mb-8">
+                  <p className="text-sm text-gray-600 mb-2">Xin chào bạn</p>
+                  <h2 className="text-3xl font-bold text-gray-900">
+                    {mode === "login" ? "Đăng Nhập Để Tiếp Tục" : "Đăng Ký Tài Khoản"}
+                  </h2>
+                </div>
+
+                {/* Login Form */}
+                {mode === "login" ? (
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    {loginError && (
+                      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        {loginError}
+                      </div>
+                    )}
+
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Mail size={20} />
+                      </div>
+                      <input
+                        type="email"
+                        placeholder="Số Điện Thoại Hoặc Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
+                      />
+                    </div>
+
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Lock size={20} />
+                      </div>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Mật Khẩu"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                          className="w-4 h-4 border-2 border-gray-300 rounded cursor-pointer accent-[#6B1F2F]"
+                        />
+                        <span className="text-gray-600">Nhớ Tài Khoản</span>
+                      </label>
+                      <a href="#" className="text-[#6B1F2F] hover:underline font-medium">
+                        Quên Mật Khẩu?
+                      </a>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loginLoading}
+                      className="w-full bg-[#6B1F2F] hover:bg-[#8B2E3F] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                    >
+                      {loginLoading ? (
+                        <>
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Đang xử lý...
+                        </>
+                      ) : (
+                        "Đăng Nhập"
+                      )}
+                    </button>
+
+                    <div className="flex items-center gap-4 my-6">
+                      <div className="flex-1 h-px bg-gray-300"></div>
+                      <span className="text-gray-500 text-sm">Hoặc</span>
+                      <div className="flex-1 h-px bg-gray-300"></div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <button
+                        type="button"
+                        onClick={() => authService.redirectToFacebook()}
+                        className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 py-3 rounded-lg transition-colors duration-200"
+                      >
+                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                          <path
+                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                            fill="#1877F2"
+                          />
+                        </svg>
+                        <span className="text-gray-700 font-medium">Đăng Nhập Với Facebook</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => authService.redirectToGoogle()}
+                        className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 hover:border-red-500 hover:bg-red-50 py-3 rounded-lg transition-colors duration-200"
+                      >
+                        <svg className="w-6 h-6" viewBox="0 0 24 24">
+                          <path
+                            fill="#EA4335"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                          />
+                          <path
+                            fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                          />
+                          <path
+                            fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                          />
+                          <path
+                            fill="#4285F4"
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                          />
+                        </svg>
+                        <span className="text-gray-700 font-medium">Đăng Nhập Với Google</span>
+                      </button>
+                    </div>
+
+                    <p className="text-center text-gray-600 text-sm mt-6">
+                      Bạn chưa có tài khoản?{" "}
+                      <button
+                        type="button"
+                        onClick={() => setMode("register")}
+                        className="text-[#6B1F2F] hover:underline font-semibold"
+                      >
+                        Đăng Ký tại đây
+                      </button>
+                    </p>
+                  </form>
+                ) : (
+                  /* Register Form */
+                  <form onSubmit={handleRegister} className="space-y-4">
+                    {registerError && (
+                      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        {registerError}
+                      </div>
+                    )}
+
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Mail size={20} />
+                      </div>
+                      <input
+                        type="email"
+                        placeholder="Số Điện Thoại Hoặc Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
+                      />
+                    </div>
+
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <User size={20} />
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Họ Và Tên"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
+                      />
+                    </div>
+
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Lock size={20} />
+                      </div>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Mật Khẩu"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <Lock size={20} />
+                      </div>
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Xác Nhận Mật Khẩu"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+
+                    <label className="flex items-start gap-3 cursor-pointer mt-4">
+                      <input
+                        type="checkbox"
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                        className="w-4 h-4 border-2 border-gray-300 rounded cursor-pointer accent-[#6B1F2F] mt-1 flex-shrink-0"
+                      />
+                      <span className="text-sm text-gray-600">
+                        Bằng việc tiếp tục, bạn đồng ý{" "}
+                        <a href="#" className="text-[#6B1F2F] font-semibold hover:underline">
+                          Điều khoản sử dụng
+                        </a>
+                        ,{" "}
+                        <a href="#" className="text-[#6B1F2F] font-semibold hover:underline">
+                          Chính sách bảo mật
+                        </a>
+                        ,{" "}
+                        <a href="#" className="text-[#6B1F2F] font-semibold hover:underline">
+                          Quy chế
+                        </a>{" "}
+                        của chúng tôi.
+                      </span>
+                    </label>
+
+                    <button
+                      type="submit"
+                      disabled={registerLoading}
+                      className="w-full bg-[#6B1F2F] hover:bg-[#8B2E3F] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors duration-200 mt-6 flex items-center justify-center gap-2"
+                    >
+                      {registerLoading ? (
+                        <>
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Đang xử lý...
+                        </>
+                      ) : (
+                        "Đăng Ký"
+                      )}
+                    </button>
+
+                    <p className="text-center text-gray-600 text-sm mt-6">
+                      Bạn đã có tài khoản?{" "}
+                      <button
+                        type="button"
+                        onClick={() => setMode("login")}
+                        className="text-[#6B1F2F] hover:underline font-semibold"
+                      >
+                        Đăng Nhập tại đây
+                      </button>
+                    </p>
+                  </form>
+                )}
               </div>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Mật Khẩu"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#6B1F2F] transition-colors"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
             </div>
-
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#6B1F2F] hover:bg-[#8B2E3F] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Đang xử lý...
-                </>
-              ) : (
-                "Đăng Nhập"
-              )}
-            </button>
-          </form>
-
-          {/* Remember & Forgot Password */}
-          <div className="flex items-center justify-between mt-4 text-sm">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 border-2 border-gray-300 rounded cursor-pointer accent-[#6B1F2F]"
-              />
-              <span className="text-gray-600">Nhớ Tài Khoản</span>
-            </label>
-            <a href="#" className="text-[#6B1F2F] hover:underline font-medium">
-              Quên Mật Khẩu?
-            </a>
           </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-gray-300"></div>
-            <span className="text-gray-500 text-sm">Hoặc</span>
-            <div className="flex-1 h-px bg-gray-300"></div>
-          </div>
-
-          {/* Social Login Buttons */}
-          <div className="space-y-3">
-            {/* Facebook Login */}
-            <button
-              type="button"
-              onClick={() => {
-                authService.redirectToFacebook();
-              }}
-              className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 py-3 rounded-lg transition-colors duration-200"
-            >
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-                  fill="#1877F2"
-                />
-              </svg>
-              <span className="text-gray-700 font-medium">Đăng Nhập Với Facebook</span>
-            </button>
-
-            {/* Google Login */}
-            <button
-              type="button"
-              onClick={() => {
-                authService.redirectToGoogle();
-              }}
-              className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 hover:border-red-500 hover:bg-red-50 py-3 rounded-lg transition-colors duration-200"
-            >
-              <svg className="w-6 h-6" viewBox="0 0 24 24">
-                <path
-                  fill="#EA4335"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#4285F4"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              <span className="text-gray-700 font-medium">Đăng Nhập Với Google</span>
-            </button>
-          </div>
-
-          {/* Sign Up Link */}
-          <p className="text-center text-gray-600 text-sm mt-6">
-            Bạn chưa có tài khoản?{" "}
-            <a href="/register" className="text-[#6B1F2F] hover:underline font-semibold">
-              Đăng Ký tại đây
-            </a>
-          </p>
         </div>
       </div>
-    </div>
     </>
-  )
-}
+  );
+};
+
+export default AuthModal;
+

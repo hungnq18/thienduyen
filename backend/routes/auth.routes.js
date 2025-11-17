@@ -2,6 +2,8 @@ const express = require('express');
 const { body } = require('express-validator');
 const { register, login, getMe } = require('../controllers/auth.controller');
 const { protect } = require('../middleware/auth.middleware');
+const { googleCallback, facebookCallback } = require('../controllers/oauth.controller');
+const { passport } = require('../config/passport');
 
 const router = express.Router();
 
@@ -44,6 +46,22 @@ const loginValidation = [
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
 router.get('/me', protect, getMe);
+
+// OAuth Routes
+// Google OAuth
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', 
+  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  googleCallback
+);
+
+// Facebook OAuth
+// Note: Email is automatically requested via profileFields, no need for scope
+router.get('/facebook', passport.authenticate('facebook'));
+router.get('/facebook/callback',
+  passport.authenticate('facebook', { session: false, failureRedirect: '/login' }),
+  facebookCallback
+);
 
 module.exports = router;
 

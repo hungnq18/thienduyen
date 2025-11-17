@@ -73,6 +73,30 @@ class AuthService {
     return localStorage.getItem('token');
   }
 
+  // Get OAuth URLs
+  getGoogleAuthUrl() {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    // Remove trailing /api if present
+    const baseUrl = apiUrl.replace(/\/api$/, '');
+    return `${baseUrl}/api/auth/google`;
+  }
+
+  getFacebookAuthUrl() {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    // Remove trailing /api if present
+    const baseUrl = apiUrl.replace(/\/api$/, '');
+    return `${baseUrl}/api/auth/facebook`;
+  }
+
+  // Redirect to OAuth provider
+  redirectToGoogle() {
+    window.location.href = this.getGoogleAuthUrl();
+  }
+
+  redirectToFacebook() {
+    window.location.href = this.getFacebookAuthUrl();
+  }
+
   // Error handler
   handleError(error) {
     if (error.response) {

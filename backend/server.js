@@ -6,6 +6,9 @@ const dotenv = require('dotenv');
 // Load env vars
 dotenv.config();
 
+// Import passport config
+require('./config/passport');
+
 // Import routes
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chat.routes');
@@ -40,6 +43,13 @@ app.use('/api/newsletter', newsletterRoutes);
 
 // Log registered routes
 console.log('📋 Registered routes:');
+console.log('   POST /api/auth/register');
+console.log('   POST /api/auth/login');
+console.log('   GET  /api/auth/me');
+console.log('   GET  /api/auth/google');
+console.log('   GET  /api/auth/google/callback');
+console.log('   GET  /api/auth/facebook');
+console.log('   GET  /api/auth/facebook/callback');
 console.log('   POST /api/chat/message');
 console.log('   POST /api/contact/send');
 console.log('   GET  /api/contact/my-contacts');
@@ -74,6 +84,13 @@ app.use((req, res) => {
     status: 'error',
     message: `Route not found: ${req.method} ${req.path}`,
     availableRoutes: [
+      'POST /api/auth/register',
+      'POST /api/auth/login',
+      'GET  /api/auth/me',
+      'GET  /api/auth/google',
+      'GET  /api/auth/google/callback',
+      'GET  /api/auth/facebook',
+      'GET  /api/auth/facebook/callback',
       'POST /api/chat/message',
       'POST /api/contact/send',
       'GET  /api/contact/my-contacts',
@@ -90,11 +107,26 @@ app.use((req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 
+// Get base URL for logging
+const getBaseUrl = () => {
+  if (process.env.BACKEND_URL) {
+    return process.env.BACKEND_URL;
+  }
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.PRODUCTION_BACKEND_URL || `https://your-backend-domain.com:${PORT}`;
+  }
+  return `http://localhost:${PORT}`;
+};
+
 // Start server immediately (MongoDB connection is optional for chat API)
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📍 API Base URL: http://localhost:${PORT}/api`);
+  console.log(`📍 API Base URL: ${getBaseUrl()}`);
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL || 'Not configured'}`);
+    console.log(`📍 Google Callback: ${process.env.GOOGLE_CALLBACK_URL || `${getBaseUrl()}/api/auth/google/callback`}`);
+  }
 });
 
 // Connect to MongoDB (optional - only needed for auth features)

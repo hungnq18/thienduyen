@@ -1,11 +1,24 @@
 import axios from 'axios';
 
 // Base API URL
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+// Ensure API_URL ends with /api
+const getBaseURL = () => {
+  if (!API_URL) {
+    return 'http://localhost:5000/api';
+  }
+  // If URL already includes /api, use as is
+  if (API_URL.includes('/api')) {
+    return API_URL;
+  }
+  // Otherwise, append /api
+  return API_URL.endsWith('/') ? `${API_URL}api` : `${API_URL}/api`;
+};
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },

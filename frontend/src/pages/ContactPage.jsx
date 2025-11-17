@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../components/Toast';
 import { useAuth } from '../context/AuthContext';
@@ -19,6 +19,11 @@ function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { toast, showToast, hideToast } = useToast();
+  const hasAutoFilledRef = useRef(false);
+
+  // Memoize user properties to avoid unnecessary re-renders
+  const userFullName = useMemo(() => user?.fullName || '', [user?.fullName]);
+  const userEmail = useMemo(() => user?.email || '', [user?.email]);
 
   // Load form data from sessionStorage on mount
   useEffect(() => {
@@ -31,21 +36,28 @@ function ContactPage() {
         console.error('Error loading form data from session:', error);
       }
     }
-    
-    // Auto-fill user info if logged in
-    if (!loading && isAuthenticated && user) {
+  }, []);
+
+  // Auto-fill user info if logged in (only once)
+  useEffect(() => {
+    if (!loading && isAuthenticated && user && !hasAutoFilledRef.current) {
       setFormData((prev) => {
+        // Only update if the values are actually different
+        if (prev.name === (userFullName || '') && prev.email === (userEmail || '')) {
+          return prev;
+        }
         const updated = {
           ...prev,
-          name: user.fullName || prev.name,
-          email: user.email || prev.email,
+          name: userFullName || prev.name,
+          email: userEmail || prev.email,
         };
         // Save to sessionStorage
         sessionStorage.setItem('contactFormData', JSON.stringify(updated));
+        hasAutoFilledRef.current = true;
         return updated;
       });
     }
-  }, [isAuthenticated, user, loading]);
+  }, [isAuthenticated, userFullName, userEmail, loading]);
 
   // Save form data to sessionStorage whenever it changes
   useEffect(() => {

@@ -165,7 +165,9 @@ const Header = () => {
       
       <div className="w-full flex justify-between items-center px-6 lg:px-16 py-4">
         <div className="flex items-center gap-3">
+          <Link to="/" className="cursor-pointer">
           <img src={logo} alt="logo" className="w-[80px] h-[80px] lg:w-[120px] lg:h-[120px]" />
+          </Link>
         </div>
 
         {/* Search Bar */}
@@ -205,12 +207,23 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link to="/register" className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold">
+              <button
+                onClick={() => {
+                  // Trigger modal via custom event or state management
+                  window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'register' } }));
+                }}
+                className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold"
+              >
                 Đăng Ký
-              </Link>
-              <Link to="/login" className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold">
+              </button>
+              <button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'login' } }));
+                }}
+                className="text-[#F8FBF2] hover:text-[#E8C585] transition-colors font-semibold"
+              >
                 Đăng Nhập
-              </Link>
+              </button>
             </>
           )}
         </div>
@@ -320,12 +333,24 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link to="/register" onClick={() => setMenuOpen(false)} className="text-[#F8FBF2] hover:text-[#E8C585]">
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'register' } }));
+                  }}
+                  className="text-[#F8FBF2] hover:text-[#E8C585]"
+                >
                   Đăng Ký
-                </Link>
-                <Link to="/login" onClick={() => setMenuOpen(false)} className="text-[#F8FBF2] hover:text-[#E8C585]">
+                </button>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { mode: 'login' } }));
+                  }}
+                  className="text-[#F8FBF2] hover:text-[#E8C585]"
+                >
                   Đăng Nhập
-                </Link>
+                </button>
               </>
             )}
           </div>
