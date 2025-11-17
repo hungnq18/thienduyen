@@ -33,7 +33,7 @@ function DecorationSeviceSection() {
       {/* Content Section */}
       <div className="flex flex-col md:flex-row w-5/6 mx-auto mt-4 md:mt-10">
         <img
-          src="https://res.cloudinary.com/dijayprrw/image/upload/v1760802313/Rectangle_4484_mrfxbz.png"
+          src="https://res.cloudinary.com/dijayprrw/image/upload/v1763351731/a7d8272ea81c24427d0d_1_nw2uua.jpg"
           alt="Decoration Service"
           className="w-full md:w-1/2 h-64 sm:h-80 md:h-auto object-cover md:rounded-l-md"
         />
